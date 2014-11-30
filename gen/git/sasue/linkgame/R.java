@@ -25,6 +25,7 @@ public final class R {
         public static final int p_7=0x7f02000b;
         public static final int p_8=0x7f02000c;
         public static final int p_9=0x7f02000d;
+        public static final int room=0x7f02000e;
     }
     public static final class id {
         public static final int gameView=0x7f060000;
