@@ -106,7 +106,7 @@ public class MainActivity extends Activity
 	}
 	
 	private void handleSuccessLink(List<Point> linkInfo, int[] selected,
-			int[] current, int[][] pieces) 
+			int[] current, int[][] pieces)  
 	{
 	//	Log.i("test4", "linkInfo.size:"+linkInfo.size());
 		
@@ -118,14 +118,18 @@ public class MainActivity extends Activity
 		pieces[selected[0]][selected[1]] = 0;
 		
 		this.selected = null;
-		
-		if(!gameService.hasPieces())
-			Toast.makeText(getApplicationContext(), "ÄúÓ®À²£¡£¡", Toast.LENGTH_LONG).show();
 	}
 
 	private void gameViewTouchUp(MotionEvent e)
 	{
-		gameView.postInvalidate();
+		if(!gameService.hasPieces())
+		{
+			Toast.makeText(getApplicationContext(), "ÄúÓ®À²£¡£¡", Toast.LENGTH_LONG).show();
+			
+			gameService.start(0);
+			gameView.setPieces(gameService.getPieces());
+			gameView.postInvalidate();
+		}
 	}
 	
 	
