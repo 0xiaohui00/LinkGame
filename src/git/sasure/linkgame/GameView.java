@@ -1,6 +1,6 @@
-package git.sasue.linkgame;
+package git.sasure.linkgame;
 
-import git.sasue.Kit.GameKit;
+import git.sasure.Kit.GameKit;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class GameView extends View
 	/**
 	 * 唯一的构造函数
 	 */
-	public GameView(Context context, AttributeSet attrs) 
+	public GameView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		

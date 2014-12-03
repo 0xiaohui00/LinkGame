@@ -1,6 +1,6 @@
-package git.sasue.Abs;
+package git.sasure.Abs;
 
-import git.sasue.Kit.GameKit;
+import git.sasure.Kit.GameKit;
 
 import java.util.List;
 

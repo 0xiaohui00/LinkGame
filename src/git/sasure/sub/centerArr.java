@@ -1,11 +1,11 @@
-package git.sasue.sub;
+package git.sasure.sub;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Point;
-import git.sasue.Abs.SquareArrangement;
-import git.sasue.Kit.GameKit;
+import git.sasure.Abs.SquareArrangement;
+import git.sasure.Kit.GameKit;
 
 /**
  * 其产生的方块排列顺序如：

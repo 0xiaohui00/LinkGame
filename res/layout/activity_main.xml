@@ -6,7 +6,7 @@
     android:background="@drawable/room"
     tools:context="${relativePackage}.${activityClass}" >
     
-        <git.sasue.linkgame.GameView 
+        <git.sasure.linkgame.GameView 
 	        android:id="@+id/gameView"
 	        android:layout_width="700px"
 	        android:layout_height="800px"

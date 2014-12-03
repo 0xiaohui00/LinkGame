@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package git.sasue.linkgame;
+package git.sasure.linkgame;
 
 public final class R {
     public static final class attr {

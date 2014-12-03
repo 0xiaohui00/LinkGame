@@ -1,6 +1,6 @@
-package git.sasue.Kit;
+package git.sasure.Kit;
 
-import git.sasue.linkgame.R;
+import git.sasure.linkgame.R;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

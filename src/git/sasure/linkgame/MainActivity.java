@@ -1,9 +1,9 @@
-package git.sasue.linkgame;
+package git.sasure.linkgame;
 
 import java.util.List;
 
-import git.sasue.Abs.GameService;
-import git.sasue.sub.GameLogic;
+import git.sasure.Abs.GameService;
+import git.sasure.sub.GameLogic;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package git.sasue.sub;
+package git.sasure.sub;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.Random;
 
 import android.graphics.Point;
 import android.util.Log;
-import git.sasue.Abs.GameService;
-import git.sasue.Abs.SquareArrangement;
-import git.sasue.Kit.GameKit;
+import git.sasure.Abs.GameService;
+import git.sasure.Abs.SquareArrangement;
+import git.sasure.Kit.GameKit;
 
 /**
  * 实现了GameService接口，定义自己的游戏规则

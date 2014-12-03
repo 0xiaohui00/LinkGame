@@ -1,4 +1,4 @@
-package git.sasue.Abs;
+package git.sasure.Abs;
 
 import java.util.List;
 
