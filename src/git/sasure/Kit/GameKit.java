@@ -4,6 +4,7 @@ import git.sasure.Abs.SquareArrangement;
 import git.sasure.linkgame.Piece;
 import git.sasure.linkgame.R;
 import git.sasure.sub.centerArr;
+import git.sasure.sub.fullArr;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -40,19 +41,20 @@ public class GameKit
 		myArrs = new ArrayList<>();
 		
 		myArrs.add(new centerArr());
+		myArrs.add(new fullArr());
 	}
 	
 	public static int[][] start(int i)
 	{
 		int[][] pieces;
 		
-		if(i > myArrs.size() - 1 || i < myArrs.size() -1)
+		if(i > myArrs.size() - 1 || i < 0)
 		{
 			Random rand = new Random();
 			int loca = rand.nextInt(myArrs.size());
 			
-			Log.i("test", myArrs.size() + "");
-			Log.i("test", loca + "");
+		//	Log.i("test", myArrs.size() + "");
+		//	Log.i("test", loca + "");
 			pieces = myArrs.get(loca).createPieces();
 		}
 		else

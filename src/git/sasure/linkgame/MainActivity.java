@@ -37,7 +37,7 @@ public class MainActivity extends Activity
 	{
 		gameView = (GameView) findViewById(R.id.gameView);
 		
-		pieces = GameKit.start(0);
+		pieces = GameKit.start(-1);
 		gameView.setPieces(pieces);
 		gameView.postInvalidate();
 		
@@ -112,7 +112,7 @@ public class MainActivity extends Activity
 		{
 			Toast.makeText(getApplicationContext(), "ÄúÓ®À²£¡£¡", Toast.LENGTH_LONG).show();
 			
-			pieces = GameKit.start(0);
+			pieces = GameKit.start(-1);
 			gameView.setPieces(pieces);
 			gameView.postInvalidate();
 		}
