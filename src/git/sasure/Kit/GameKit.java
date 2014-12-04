@@ -1,6 +1,7 @@
 package git.sasure.Kit;
 
 import git.sasure.Abs.SquareArrangement;
+import git.sasure.linkgame.Piece;
 import git.sasure.linkgame.R;
 import git.sasure.sub.centerArr;
 
@@ -48,9 +49,11 @@ public class GameKit
 		if(i > myArrs.size() - 1 || i < myArrs.size() -1)
 		{
 			Random rand = new Random();
+			int loca = rand.nextInt(myArrs.size());
 			
-			pieces = myArrs.get(rand.nextInt(myArrs.size() - 1)).createPieces();
-			
+			Log.i("test", myArrs.size() + "");
+			Log.i("test", loca + "");
+			pieces = myArrs.get(loca).createPieces();
 		}
 		else
 		{
@@ -60,21 +63,21 @@ public class GameKit
 		return pieces;
 	}
 	
-	public static List<Point> link(int[] first, int[] second,int[][] pieces) 
+	public static List<Point> link(Piece first, Piece second,int[][] pieces) 
 	{
-		if(first[0] == second[0] && first[1] == second[1])
+		if(first.i == second.i && first.j == second.j)
 			return null;
 		
-		if(pieces[first[0]][first[1]] != pieces[second[0]][second[1]])
+		if(pieces[first.i][first.j] != pieces[second.i][second.j])
 			return null;
 		
-		if(first[1] == second[1] && horizon(first, second,pieces))
+		if(first.j == second.j && horizon(first, second,pieces))
 			return changeToList(first,second);
 		
-		if(first[0] == second[0] && vertical(first, second,pieces))
+		if(first.i == second.i && vertical(first, second,pieces))
 			return changeToList(first,second);
 		
-		int[] corner = getCornerPoint(first, second,pieces);
+		Piece corner = getCornerPoint(first, second,pieces);
 		
 		
 		if(corner != null)
@@ -82,15 +85,15 @@ public class GameKit
 			return changeToList(first,corner,second);
 		}
 		
-		List<Point> leftChenel = getLeftCheList(first, 0,pieces);
-		List<Point> reghtChenel = getRightChenel(first, GameKit.GameXN,pieces);
-		List<Point> upChenel = getUpChenel(first, 0,pieces);
-		List<Point> downChenel = getDownChenel(first, GameKit.GameYN,pieces);
+		List<Piece> leftChenel = getLeftCheList(first, 0,pieces);
+		List<Piece> reghtChenel = getRightChenel(first, GameKit.GameXN,pieces);
+		List<Piece> upChenel = getUpChenel(first, 0,pieces);
+		List<Piece> downChenel = getDownChenel(first, GameKit.GameYN,pieces);
 		
 		for(int i = 0;i < leftChenel.size();++i)
 		{
-			int[] corner1 = new int[]{leftChenel.get(i).x,leftChenel.get(i).y};
-			int[] corner2 = getCornerPoint(corner1, second,pieces);
+			Piece corner1 = new Piece(leftChenel.get(i).i,leftChenel.get(i).j);
+			Piece corner2 = getCornerPoint(corner1, second,pieces);
 			
 			if(corner2 != null)
 			{
@@ -100,8 +103,8 @@ public class GameKit
 		
 		for(int i = 0;i < reghtChenel.size();++i)
 		{
-			int[] corner1 = new int[]{reghtChenel.get(i).x,reghtChenel.get(i).y};
-			int[] corner2 = getCornerPoint(corner1, second,pieces);
+			Piece corner1 = new Piece(reghtChenel.get(i).i,reghtChenel.get(i).j);
+			Piece corner2 = getCornerPoint(corner1, second,pieces);
 			
 			if(corner2 != null)
 			{
@@ -111,8 +114,8 @@ public class GameKit
 		
 		for(int i = 0;i < upChenel.size();++i)
 		{
-			int[] corner1 = new int[]{upChenel.get(i).x,upChenel.get(i).y};
-			int[] corner2 = getCornerPoint(corner1, second,pieces);
+			Piece corner1 = new Piece(upChenel.get(i).i,upChenel.get(i).j);
+			Piece corner2 = getCornerPoint(corner1, second,pieces);
 			
 			if(corner2 != null)
 			{
@@ -122,8 +125,8 @@ public class GameKit
 		
 		for(int i = 0;i < downChenel.size();++i)
 		{
-			int[] corner1 = new int[]{downChenel.get(i).x,downChenel.get(i).y};
-			int[] corner2 = getCornerPoint(corner1, second,pieces);
+			Piece corner1 = new Piece(downChenel.get(i).i,downChenel.get(i).j);
+			Piece corner2 = getCornerPoint(corner1, second,pieces);
 			
 			if(corner2 != null)
 			{
@@ -135,11 +138,11 @@ public class GameKit
 		return null;
 	}
 	
-	private static boolean horizon(int[] first,int[] second,int[][] pieces)
+	private static boolean horizon(Piece first,Piece second,int[][] pieces)
 	{
-		int x_start = first[0] < second[0] ? first[0] : second[0];
-		int x_end = first[0] > second[0] ? first[0] : second[0];
-		int y = first[1];
+		int x_start = first.i < second.i ? first.i : second.i;
+		int x_end = first.i > second.i ? first.i : second.i;
+		int y = first.j;
 		
 		for(int x = x_start + 1;x < x_end;++x)
 			if(pieces[x][y] != 0)
@@ -148,11 +151,11 @@ public class GameKit
 		return true;
 	}
 	
-	private static boolean vertical(int[] first,int[] second,int[][] pieces)
+	private static boolean vertical(Piece first,Piece second,int[][] pieces)
 	{
-		int y_start = first[1] < second[1] ? first[1] : second[1];
-		int y_end = first[1] > second[1] ? first[1] : second[1];
-		int x = first[0];
+		int y_start = first.j < second.j ? first.j : second.j;
+		int y_end = first.j > second.j ? first.j : second.j;
+		int x = first.i;
 		
 		for(int y = y_start + 1;y < y_end;++y)
 			if(pieces[x][y] != 0)
@@ -161,16 +164,16 @@ public class GameKit
 		return true;
 	}
 	
-	private static int[] getCornerPoint(int[] first,int[] second,int[][] pieces)
+	private static Piece getCornerPoint(Piece first,Piece second,int[][] pieces)
 	{
-		int[] corner1 = new int[]{first[0],second[1]};
-		int[] corner2 = new int[]{second[0],first[1]};
+		Piece corner1 = new Piece(first.i,second.j);
+		Piece corner2 = new Piece(second.i,first.j);
 		
-		if(pieces[corner1[0]][corner1[1]] == 0)
+		if(pieces[corner1.i][corner1.j] == 0)
 			if(vertical(first, corner1,pieces) && horizon(corner1, second,pieces))
 				return corner1;
 		
-		if (pieces[corner2[0]][corner2[1]] == 0) 
+		if (pieces[corner2.i][corner2.j] == 0) 
 			if(horizon(first, corner2,pieces) && vertical(corner2, second,pieces))
 				return corner2;
 		
@@ -183,16 +186,16 @@ public class GameKit
 	 * @param min
 	 * @return 返回该方块左通道
 	 */
-	private static List<Point> getLeftCheList(int[] current,int min,int[][] pieces)
+	private static List<Piece> getLeftCheList(Piece current,int min,int[][] pieces)
 	{
-		List<Point> result = new ArrayList<>();
+		List<Piece> result = new ArrayList<>();
 		
-		for(int i = current[0] - 1;i >= min;--i)
+		for(int i = current.i - 1;i >= min;--i)
 		{
-			if(pieces[i][current[1]] != 0)
+			if(pieces[i][current.j] != 0)
 				return result;
 			
-			result.add(new Point(i,current[1]));
+			result.add(new Piece(i,current.j));
 		}
 		
 		return result;
@@ -204,16 +207,16 @@ public class GameKit
 	 * @param max
 	 * @return 返回当前方块的右通道
 	 */
-	private static List<Point> getRightChenel(int[] current,int max,int[][] pieces)
+	private static List<Piece> getRightChenel(Piece current,int max,int[][] pieces)
 	{
-		List<Point> result = new ArrayList<>();
+		List<Piece> result = new ArrayList<>();
 		
-		for(int i = current[0] + 1;i <= max - 1;++i)
+		for(int i = current.i + 1;i <= max - 1;++i)
 		{
-			if(pieces[i][current[1]] != 0)
+			if(pieces[i][current.j] != 0)
 				return result;
 			
-			result.add(new Point(i,current[1]));
+			result.add(new Piece(i,current.j));
 		}
 		
 		return result;
@@ -225,16 +228,16 @@ public class GameKit
 	 * @param mim
 	 * @return 返回当前方块的上通道
 	 */
-	private static List<Point> getUpChenel(int[] current,int min,int[][] pieces)
+	private static List<Piece> getUpChenel(Piece current,int min,int[][] pieces)
 	{
-		List<Point> result = new ArrayList<>();
+		List<Piece> result = new ArrayList<>();
 		
-		for(int j = current[1] - 1;j >= min;--j)
+		for(int j = current.j - 1;j >= min;--j)
 		{
-			if(pieces[current[0]][j] != 0)
+			if(pieces[current.i][j] != 0)
 				return result;
 			
-			result.add(new Point(current[0],j));
+			result.add(new Piece(current.i,j));
 		}
 		
 		return result;
@@ -246,16 +249,16 @@ public class GameKit
 	 * @param max
 	 * @return 返回当前方块的下通道
 	 */
-	private static List<Point> getDownChenel(int[] current,int max,int[][] pieces)
+	private static List<Piece> getDownChenel(Piece current,int max,int[][] pieces)
 	{
-		List<Point> result = new ArrayList<>();
+		List<Piece> result = new ArrayList<>();
 		
-		for(int j = current[1] + 1;j <= max - 1;++j)
+		for(int j = current.j + 1;j <= max - 1;++j)
 		{
-			if(pieces[current[0]][j] != 0)
+			if(pieces[current.i][j] != 0)
 				return result;
 			
-			result.add(new Point(current[0],j));
+			result.add(new Piece(current.i,j));
 		}
 		
 		return result;
@@ -359,9 +362,9 @@ public class GameKit
 		Game_Y_begin = loca[1];
 	}
 
-	public static int[] findPiece(float X, float Y) 
+	public static Piece findPiece(float X, float Y) 
 	{
-		int[] current  = new int[2];
+		Piece current  = new Piece();
 		
 		int touchX = (int) X - Game_X_begin;
 		int touchY = (int) Y - Game_Y_begin;
@@ -380,8 +383,8 @@ public class GameKit
 			return null;
 		}
 		
-		current[0] = indexX;
-		current[1] = indexY;
+		current.i = indexX;
+		current.j = indexY;
 		
 		return current;
 	}
@@ -406,9 +409,9 @@ public class GameKit
 		return index;
 	}
 	
-	private static Point getLinkPoint(int[] current)
+	private static Point getLinkPoint(Piece current)
 	{
-		return new Point(Game_X_begin + current[0] * PieceWidth + PieceWidth / 2, Game_Y_begin + current[1] * PieceHeidth + PieceHeidth / 2);
+		return new Point(Game_X_begin + current.i * PieceWidth + PieceWidth / 2, Game_Y_begin + current.j * PieceHeidth + PieceHeidth / 2);
 	}
 	
 	/**
@@ -416,11 +419,11 @@ public class GameKit
 	 * @param points
 	 * @return
 	 */
-	public static List<Point> changeToList(int[] ... points)
+	public static List<Point> changeToList(Piece ... pieces)
 	{
 		List<Point> ArrPoint = new ArrayList<>();
 		
-		for(int[] point : points)
+		for(Piece point : pieces)
 		{
 			Point xy = getLinkPoint(point);
 			ArrPoint.add(xy);

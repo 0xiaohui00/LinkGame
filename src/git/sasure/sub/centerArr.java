@@ -3,9 +3,9 @@ package git.sasure.sub;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Point;
 import git.sasure.Abs.SquareArrangement;
 import git.sasure.Kit.GameKit;
+import git.sasure.linkgame.Piece;
 
 /**
  * 其产生的方块排列顺序如：
@@ -18,15 +18,15 @@ import git.sasure.Kit.GameKit;
 public class centerArr extends SquareArrangement {
 
 	@Override
-	protected List<Point> createArrangement() 
+	protected List<Piece> createArrangement() 
 	{
-		List<Point> notNullPoints = new ArrayList<>();
+		List<Piece> notNullPieces = new ArrayList<>();
 		
 		for(int i = 1;i < GameKit.GameXN - 1;++i)
 			for(int j = 1;j < GameKit.GameYN - 1;++j)
-				notNullPoints.add(new Point(i, j));
+				notNullPieces.add(new Piece(i, j));
 		
-		return notNullPoints;
+		return notNullPieces;
 	}
 
 }

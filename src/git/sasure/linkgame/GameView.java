@@ -25,7 +25,7 @@ public class GameView extends View
 	private Paint paint;//画笔
 	private int[][] pieces;//其每个元素即每个方块，0即无，非0即有，每个非零的值代表一个的图片ID
 	private Bitmap checkedBox;//选中框的图片
-	private int[] checkedPoint;//选中框的位置
+	private Piece checkedPiece;//选中框的位置
 	private List<Point> links;//连接线的信息
 	private Context context;//保留包的信息
 	
@@ -44,7 +44,7 @@ public class GameView extends View
 		
 		checkedBox = GameKit.getCheckedBox(context);//获取选中框的图片
 		
-		checkedPoint = null;
+		checkedPiece = null;
 		links = null;
 		
 		int[] loca = new int[2];
@@ -77,9 +77,9 @@ public class GameView extends View
 	 * 设置选中框位置的方法
 	 * @param checkedPoint
 	 */
-	public void setCheckedPoint(int[] checkedPoint)
+	public void setCheckedPiece(Piece checkedPiece)
 	{
-		this.checkedPoint = checkedPoint;
+		this.checkedPiece = checkedPiece;
 	}
 	
 	/**绘制游戏界面
@@ -107,9 +107,9 @@ public class GameView extends View
 		if(links != null)
 			drawLine(canvas);
 		
-		if(checkedPoint != null && checkedBox != null)
+		if(checkedPiece != null && checkedBox != null)
 		{
-			Point checked = GameKit.getPoint(checkedPoint[0], checkedPoint[1]);
+			Point checked = GameKit.getPoint(checkedPiece.i, checkedPiece.j);
 			canvas.drawBitmap(checkedBox, checked.x, checked.y,null);
 		}
 	}

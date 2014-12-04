@@ -21,7 +21,7 @@ public class MainActivity extends Activity
 {
 
 	private GameView gameView;
-	private int[] selected = null;
+	private Piece selected = null;
 	private int[][] pieces;
 	
 	@Override
@@ -61,12 +61,12 @@ public class MainActivity extends Activity
 	
 	private void gameViewTouchDown(MotionEvent e)
 	{
-		int[] current = GameKit.findPiece(e.getX(), e.getY());
+		Piece current = GameKit.findPiece(e.getX(), e.getY());
 		
-		if(current == null || pieces[current[0]][current[1]] == 0)
+		if(current == null || pieces[current.i][current.j] == 0)
 			return;
 		
-		gameView.setCheckedPoint(current);
+		gameView.setCheckedPiece(current);
 		
 		if (selected == null)
 		{
@@ -92,16 +92,16 @@ public class MainActivity extends Activity
 		}
 	}
 	
-	private void handleSuccessLink(List<Point> linkInfo, int[] selected,
-			int[] current, int[][] pieces)  
+	private void handleSuccessLink(List<Point> linkInfo, Piece selected,
+			Piece current, int[][] pieces)  
 	{
 		
 		gameView.setLinks(linkInfo);
-		gameView.setCheckedPoint(null);
+		gameView.setCheckedPiece(null);
 		gameView.postInvalidate();
 		
-		pieces[current[0]][current[1]] = 0;
-		pieces[selected[0]][selected[1]] = 0;
+		pieces[current.i][current.j] = 0;
+		pieces[selected.i][selected.j] = 0;
 		
 		this.selected = null;
 	}

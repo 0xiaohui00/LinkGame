@@ -1,6 +1,7 @@
 package git.sasure.Abs;
 
 import git.sasure.Kit.GameKit;
+import git.sasure.linkgame.Piece;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public abstract class SquareArrangement
 	 * 子类必须实现的方法，可以产生不同的方块排列效果
 	 * @return 有方块的集合,这里用point.x代表i，point.y代表j
 	 */
-	protected abstract List<Point> createArrangement();
+	protected abstract List<Piece> createArrangement();
 	
 	/**
 	 * 将子类实现的newArrangement方法 得到的List<Point>转换为int[][]
@@ -28,14 +29,14 @@ public abstract class SquareArrangement
 	{
 		int[][] pieces = initPieces();
 		
-		List<Point> notNULLPoints = createArrangement();
-		List<Integer> SqureValues = GameKit.getValues(notNULLPoints.size());
+		List<Piece> notNULLPieces= createArrangement();
+		List<Integer> SqureValues = GameKit.getValues(notNULLPieces.size());
 		
-		for(int i = 0;i < notNULLPoints.size() && i < SqureValues.size();++i)
+		for(int i = 0;i < notNULLPieces.size() && i < SqureValues.size();++i)
 		{
-			Point point = notNULLPoints.get(i);
+			Piece piece = notNULLPieces.get(i);
 			
-			pieces[point.x][point.y] = SqureValues.get(i);
+			pieces[piece.i][piece.j] = SqureValues.get(i);
 		}
 		
 		return pieces;
