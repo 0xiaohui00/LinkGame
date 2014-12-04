@@ -10,14 +10,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import android.R.integer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.text.method.Touch;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * 
@@ -36,6 +33,7 @@ public class GameKit
 	public static int PieceWidth = 100;//每个方块的宽度
 	public static int PieceHeidth = 100;//每个方块的高度
 
+	//加载排列方式
 	static
 	{
 		myArrs = new ArrayList<>();
@@ -64,7 +62,6 @@ public class GameKit
 	
 	public static List<Point> link(int[] first, int[] second,int[][] pieces) 
 	{
-	//	Log.i("test1", "first:["+first[0]+","+first[1]+"]"+" second:["+second[0]+","+second[1]+"]");
 		if(first[0] == second[0] && first[1] == second[1])
 			return null;
 		
@@ -82,12 +79,11 @@ public class GameKit
 		
 		if(corner != null)
 		{
-	//		Log.i("test3", "corner:["+corner[0]+","+corner[1]+"]");
 			return changeToList(first,corner,second);
 		}
 		
 		List<Point> leftChenel = getLeftCheList(first, 0,pieces);
-		List<Point> reghtChenek = getRightChenel(first, GameKit.GameXN,pieces);
+		List<Point> reghtChenel = getRightChenel(first, GameKit.GameXN,pieces);
 		List<Point> upChenel = getUpChenel(first, 0,pieces);
 		List<Point> downChenel = getDownChenel(first, GameKit.GameYN,pieces);
 		
@@ -98,21 +94,17 @@ public class GameKit
 			
 			if(corner2 != null)
 			{
-		//		Log.i("test3", "corner:["+corner1[0]+","+corner1[1]+"]");
-		//		Log.i("test3", "corner:["+corner2[0]+","+corner2[1]+"]");
 				return changeToList(first,corner1,corner2,second);
 			}
 		}
 		
-		for(int i = 0;i < reghtChenek.size();++i)
+		for(int i = 0;i < reghtChenel.size();++i)
 		{
-			int[] corner1 = new int[]{reghtChenek.get(i).x,reghtChenek.get(i).y};
+			int[] corner1 = new int[]{reghtChenel.get(i).x,reghtChenel.get(i).y};
 			int[] corner2 = getCornerPoint(corner1, second,pieces);
 			
 			if(corner2 != null)
 			{
-		//		Log.i("test3", "corner:["+corner1[0]+","+corner1[1]+"]");
-		//		Log.i("test3", "corner:["+corner2[0]+","+corner2[1]+"]");
 				return changeToList(first,corner1,corner2,second);
 			}
 		}
@@ -124,8 +116,6 @@ public class GameKit
 			
 			if(corner2 != null)
 			{
-		//		Log.i("test3", "corner:["+corner1[0]+","+corner1[1]+"]");
-		//		Log.i("test3", "corner:["+corner2[0]+","+corner2[1]+"]");
 				return changeToList(first,corner1,corner2,second);
 			}
 		}
@@ -137,8 +127,6 @@ public class GameKit
 			
 			if(corner2 != null)
 			{
-		//		Log.i("test3", "corner:["+corner1[0]+","+corner1[1]+"]");
-		//		Log.i("test3", "corner:["+corner2[0]+","+corner2[1]+"]");
 				return changeToList(first,corner1,corner2,second);
 			}
 				
@@ -288,7 +276,6 @@ public class GameKit
 				if(field.getName().startsWith("p_"))
 				{
 					imageValues.add(field.getInt(R.drawable.class));
-				//	Log.i("test", field.getInt(R.drawable.class)+"");
 				}
 			return imageValues;
 		}
@@ -378,7 +365,6 @@ public class GameKit
 		
 		int touchX = (int) X - Game_X_begin;
 		int touchY = (int) Y - Game_Y_begin;
-	//	Log.i("test", "touchX:"+touchX+" touchY:"+touchY);
 		
 		if(touchX < 0 || touchY < 0)
 			return null;
@@ -388,7 +374,6 @@ public class GameKit
 		
 		int indexX = getIndex(touchX, PieceWidth);
 		int indexY = getIndex(touchY, PieceHeidth);
-	//	Log.i("test","indexx:" + indexX +"indexy:"+indexY);
 		
 		if (indexX < 0 || indexY < 0)
 		{
@@ -435,20 +420,11 @@ public class GameKit
 	{
 		List<Point> ArrPoint = new ArrayList<>();
 		
-//		Log.i("test3", "length" + points.length);
-		
 		for(int[] point : points)
 		{
-//			Log.i("test3", "point:["+point[0]+","+point[1]+"]");
 			Point xy = getLinkPoint(point);
 			ArrPoint.add(xy);
-	//		Log.i("test3","xy:("+xy.x+","+xy.y+")");
 		}
-		
-//		Log.i("test3", "size"+ArrPoint.size());
 		return ArrPoint;
 	}
-	
-	
-	
 }

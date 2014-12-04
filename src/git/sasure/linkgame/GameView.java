@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -50,7 +49,6 @@ public class GameView extends View
 		
 		int[] loca = new int[2];
 		this.getLocationOnScreen(loca);
-	//	Log.i("test", "loca[0]:"+loca[0]+"loca[1]:" + loca[1]);
 		
 		GameKit.setbeginloca(loca);
 	}
@@ -102,9 +100,7 @@ public class GameView extends View
 					continue;
 				
 				Bitmap piece = BitmapFactory.decodeResource(context.getResources(), pieces[i][j]);
-		//		Log.i("test", "piece.width"+piece.getWidth()+"piece.height"+piece.getHeight());
 				Point point = GameKit.getPoint(i, j);
-		//		Log.i("test", "piece.x"+point.x+"piece.y"+point.y);
 				canvas.drawBitmap(piece,point.x, point.y, null);
 			}
 		
@@ -124,21 +120,15 @@ public class GameView extends View
 	 */
 	private void drawLine(Canvas canvas)
 	{
-//		Log.i("test4", "links.size"+links.size());
-		
 		for(int i = 0;i < links.size() - 1 && links.size() >= 2;++i)
 		{
-	//		Log.i("test4", "i="+i);
 			Point current = links.get(i);
 			Point next = links.get(i + 1);
-			
-//			Log.i("test4", "current:["+current.x+","+current.y+"]"+";"+"next:["+next.x+","+next.y+"]");
+
 			canvas.drawLine(current.x, current.y, next.x, next.y, paint);
 		}
 		
 		links = null;
 		postInvalidate();
 	}
-	
-
 }

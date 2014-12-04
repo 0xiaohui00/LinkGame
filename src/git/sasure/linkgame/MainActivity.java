@@ -6,7 +6,6 @@ import git.sasure.Kit.GameKit;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -47,7 +46,6 @@ public class MainActivity extends Activity
 			@Override
 			public boolean onTouch(View v, MotionEvent e) 
 			{				
-			//	Log.i("test", "e.getx():"+e.getX()+",e.gety():" + e.getY());
 				if (e.getAction() == MotionEvent.ACTION_DOWN)
 				{
 					gameViewTouchDown(e);
@@ -68,14 +66,10 @@ public class MainActivity extends Activity
 		if(current == null || pieces[current[0]][current[1]] == 0)
 			return;
 		
-	//	Log.i("test", "current=" + new Point(current[0],current[1]));
-	//	Log.i("test", "piece[i][j]="+pieces[current[0]][current[1]]);
-		
 		gameView.setCheckedPoint(current);
 		
 		if (selected == null)
 		{
-		//	Log.i("test", "selected=" + new Point(selected[0],selected[1]));
 			selected = current;
 			gameView.postInvalidate();
 			
@@ -88,13 +82,11 @@ public class MainActivity extends Activity
 			
 			if(linkInfo == null)
 			{
-			//	Log.i("test", "linkInfo = null");
 				selected = current;
 				gameView.postInvalidate();
 			}
 			else
 			{
-			//	Log.i("test", "linkInfo != null");
 				handleSuccessLink(linkInfo, this.selected,current, pieces);
 			}
 		}
@@ -103,7 +95,6 @@ public class MainActivity extends Activity
 	private void handleSuccessLink(List<Point> linkInfo, int[] selected,
 			int[] current, int[][] pieces)  
 	{
-	//	Log.i("test4", "linkInfo.size:"+linkInfo.size());
 		
 		gameView.setLinks(linkInfo);
 		gameView.setCheckedPoint(null);
