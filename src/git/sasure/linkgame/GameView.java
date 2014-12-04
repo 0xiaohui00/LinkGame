@@ -40,8 +40,8 @@ public class GameView extends View
 		this.context = context;
 		
 		paint = new Paint();//初始化画笔并设置画笔属性
-		paint.setColor(Color.RED);
-		paint.setStrokeWidth(3);
+		paint.setColor(Color.GREEN);
+		paint.setStrokeWidth(5);
 		
 		checkedBox = GameKit.getCheckedBox(context);//获取选中框的图片
 		
@@ -139,4 +139,6 @@ public class GameView extends View
 		links = null;
 		postInvalidate();
 	}
+	
+
 }

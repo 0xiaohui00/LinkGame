@@ -1,6 +1,8 @@
 package git.sasure.Kit;
 
+import git.sasure.Abs.SquareArrangement;
 import git.sasure.linkgame.R;
+import git.sasure.sub.centerArr;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -8,26 +10,268 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import android.R.integer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.text.method.Touch;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * 
  * @author Sasure
- *@version 1.0
+ *@version 1.0 
  */
-public class GameKit 
+public class GameKit
 {
 	private static List<Integer> imageValues = getImageValue();
+	private static List<SquareArrangement> myArrs = null;
+	
 	public static int Game_X_begin = 0;
 	public static int Game_Y_begin = 0;
 	public static int GameXN = 7;//连连看横排有GameXN个方块
 	public static int GameYN = 8;//连连看竖排有GameYN个方块
 	public static int PieceWidth = 100;//每个方块的宽度
 	public static int PieceHeidth = 100;//每个方块的高度
+
+	static
+	{
+		myArrs = new ArrayList<>();
+		
+		myArrs.add(new centerArr());
+	}
+	
+	public static int[][] start(int i)
+	{
+		int[][] pieces;
+		
+		if(i > myArrs.size() - 1 || i < myArrs.size() -1)
+		{
+			Random rand = new Random();
+			
+			pieces = myArrs.get(rand.nextInt(myArrs.size() - 1)).createPieces();
+			
+		}
+		else
+		{
+			pieces = myArrs.get(i).createPieces();
+		}
+		
+		return pieces;
+	}
+	
+	public static List<Point> link(int[] first, int[] second,int[][] pieces) 
+	{
+	//	Log.i("test1", "first:["+first[0]+","+first[1]+"]"+" second:["+second[0]+","+second[1]+"]");
+		if(first[0] == second[0] && first[1] == second[1])
+			return null;
+		
+		if(pieces[first[0]][first[1]] != pieces[second[0]][second[1]])
+			return null;
+		
+		if(first[1] == second[1] && horizon(first, second,pieces))
+			return changeToList(first,second);
+		
+		if(first[0] == second[0] && vertical(first, second,pieces))
+			return changeToList(first,second);
+		
+		int[] corner = getCornerPoint(first, second,pieces);
+		
+		
+		if(corner != null)
+		{
+	//		Log.i("test3", "corner:["+corner[0]+","+corner[1]+"]");
+			return changeToList(first,corner,second);
+		}
+		
+		List<Point> leftChenel = getLeftCheList(first, 0,pieces);
+		List<Point> reghtChenek = getRightChenel(first, GameKit.GameXN,pieces);
+		List<Point> upChenel = getUpChenel(first, 0,pieces);
+		List<Point> downChenel = getDownChenel(first, GameKit.GameYN,pieces);
+		
+		for(int i = 0;i < leftChenel.size();++i)
+		{
+			int[] corner1 = new int[]{leftChenel.get(i).x,leftChenel.get(i).y};
+			int[] corner2 = getCornerPoint(corner1, second,pieces);
+			
+			if(corner2 != null)
+			{
+		//		Log.i("test3", "corner:["+corner1[0]+","+corner1[1]+"]");
+		//		Log.i("test3", "corner:["+corner2[0]+","+corner2[1]+"]");
+				return changeToList(first,corner1,corner2,second);
+			}
+		}
+		
+		for(int i = 0;i < reghtChenek.size();++i)
+		{
+			int[] corner1 = new int[]{reghtChenek.get(i).x,reghtChenek.get(i).y};
+			int[] corner2 = getCornerPoint(corner1, second,pieces);
+			
+			if(corner2 != null)
+			{
+		//		Log.i("test3", "corner:["+corner1[0]+","+corner1[1]+"]");
+		//		Log.i("test3", "corner:["+corner2[0]+","+corner2[1]+"]");
+				return changeToList(first,corner1,corner2,second);
+			}
+		}
+		
+		for(int i = 0;i < upChenel.size();++i)
+		{
+			int[] corner1 = new int[]{upChenel.get(i).x,upChenel.get(i).y};
+			int[] corner2 = getCornerPoint(corner1, second,pieces);
+			
+			if(corner2 != null)
+			{
+		//		Log.i("test3", "corner:["+corner1[0]+","+corner1[1]+"]");
+		//		Log.i("test3", "corner:["+corner2[0]+","+corner2[1]+"]");
+				return changeToList(first,corner1,corner2,second);
+			}
+		}
+		
+		for(int i = 0;i < downChenel.size();++i)
+		{
+			int[] corner1 = new int[]{downChenel.get(i).x,downChenel.get(i).y};
+			int[] corner2 = getCornerPoint(corner1, second,pieces);
+			
+			if(corner2 != null)
+			{
+		//		Log.i("test3", "corner:["+corner1[0]+","+corner1[1]+"]");
+		//		Log.i("test3", "corner:["+corner2[0]+","+corner2[1]+"]");
+				return changeToList(first,corner1,corner2,second);
+			}
+				
+		}
+		
+		return null;
+	}
+	
+	private static boolean horizon(int[] first,int[] second,int[][] pieces)
+	{
+		int x_start = first[0] < second[0] ? first[0] : second[0];
+		int x_end = first[0] > second[0] ? first[0] : second[0];
+		int y = first[1];
+		
+		for(int x = x_start + 1;x < x_end;++x)
+			if(pieces[x][y] != 0)
+				return false;
+		
+		return true;
+	}
+	
+	private static boolean vertical(int[] first,int[] second,int[][] pieces)
+	{
+		int y_start = first[1] < second[1] ? first[1] : second[1];
+		int y_end = first[1] > second[1] ? first[1] : second[1];
+		int x = first[0];
+		
+		for(int y = y_start + 1;y < y_end;++y)
+			if(pieces[x][y] != 0)
+				return false;
+		
+		return true;
+	}
+	
+	private static int[] getCornerPoint(int[] first,int[] second,int[][] pieces)
+	{
+		int[] corner1 = new int[]{first[0],second[1]};
+		int[] corner2 = new int[]{second[0],first[1]};
+		
+		if(pieces[corner1[0]][corner1[1]] == 0)
+			if(vertical(first, corner1,pieces) && horizon(corner1, second,pieces))
+				return corner1;
+		
+		if (pieces[corner2[0]][corner2[1]] == 0) 
+			if(horizon(first, corner2,pieces) && vertical(corner2, second,pieces))
+				return corner2;
+		
+		return null;
+	}
+	
+	/**由于二维数组不是可变长的，所以用Point封装pieces的i和j信息，point.x = i,point.y = j
+	 * 
+	 * @param current
+	 * @param min
+	 * @return 返回该方块左通道
+	 */
+	private static List<Point> getLeftCheList(int[] current,int min,int[][] pieces)
+	{
+		List<Point> result = new ArrayList<>();
+		
+		for(int i = current[0] - 1;i >= min;--i)
+		{
+			if(pieces[i][current[1]] != 0)
+				return result;
+			
+			result.add(new Point(i,current[1]));
+		}
+		
+		return result;
+	}
+	
+	/**由于二维数组不是可变长的，所以用Point封装pieces的i和j信息，point.x = i,point.y = j
+	 * 
+	 * @param current
+	 * @param max
+	 * @return 返回当前方块的右通道
+	 */
+	private static List<Point> getRightChenel(int[] current,int max,int[][] pieces)
+	{
+		List<Point> result = new ArrayList<>();
+		
+		for(int i = current[0] + 1;i <= max - 1;++i)
+		{
+			if(pieces[i][current[1]] != 0)
+				return result;
+			
+			result.add(new Point(i,current[1]));
+		}
+		
+		return result;
+	}
+	
+	/**由于二维数组不是可变长的，所以用Point封装pieces的i和j信息，point.x = i,point.y = j
+	 * 
+	 * @param current
+	 * @param mim
+	 * @return 返回当前方块的上通道
+	 */
+	private static List<Point> getUpChenel(int[] current,int min,int[][] pieces)
+	{
+		List<Point> result = new ArrayList<>();
+		
+		for(int j = current[1] - 1;j >= min;--j)
+		{
+			if(pieces[current[0]][j] != 0)
+				return result;
+			
+			result.add(new Point(current[0],j));
+		}
+		
+		return result;
+	}
+	
+	/**由于二维数组不是可变长的，所以用Point封装pieces的i和j信息，point.x = i,point.y = j
+	 * 
+	 * @param current
+	 * @param max
+	 * @return 返回当前方块的下通道
+	 */
+	private static List<Point> getDownChenel(int[] current,int max,int[][] pieces)
+	{
+		List<Point> result = new ArrayList<>();
+		
+		for(int j = current[1] + 1;j <= max - 1;++j)
+		{
+			if(pieces[current[0]][j] != 0)
+				return result;
+			
+			result.add(new Point(current[0],j));
+		}
+		
+		return result;
+	}
 	
 	/**
 	 * 获取连连看的所有以p_开头的图片的ID
@@ -109,6 +353,15 @@ public class GameKit
 		return new Point(Game_X_begin + i * PieceWidth, Game_Y_begin + j * PieceHeidth);
 	}
 	
+	public static  boolean hasPieces(int[][] pieces)
+	{
+		for(int i = 0;i < pieces.length;++i)
+			for(int j = 0;j < pieces[i].length;++j)
+				if(pieces[i][j] != 0)
+					return true;
+		
+		return false;
+	}
 	/**
 	 *设置连连看界面相对与屏幕的坐标轴 
 	 * @param loca
@@ -195,6 +448,7 @@ public class GameKit
 //		Log.i("test3", "size"+ArrPoint.size());
 		return ArrPoint;
 	}
+	
 	
 	
 }

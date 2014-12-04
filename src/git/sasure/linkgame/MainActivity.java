@@ -2,8 +2,7 @@ package git.sasure.linkgame;
 
 import java.util.List;
 
-import git.sasure.Abs.GameService;
-import git.sasure.sub.GameLogic;
+import git.sasure.Kit.GameKit;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -22,9 +21,9 @@ import android.widget.Toast;
 public class MainActivity extends Activity 
 {
 
-	GameView gameView;
-	GameService gameService;
-	int[] selected = null;
+	private GameView gameView;
+	private int[] selected = null;
+	private int[][] pieces;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -38,10 +37,9 @@ public class MainActivity extends Activity
 	private void init()
 	{
 		gameView = (GameView) findViewById(R.id.gameView);
-		gameService = new GameLogic();
 		
-		gameService.start(0);
-		gameView.setPieces(gameService.getPieces());
+		pieces = GameKit.start(0);
+		gameView.setPieces(pieces);
 		gameView.postInvalidate();
 		
 		gameView.setOnTouchListener(new OnTouchListener()
@@ -61,14 +59,11 @@ public class MainActivity extends Activity
 				return true;
 			}
 		});
-		
-
 	}
 	
 	private void gameViewTouchDown(MotionEvent e)
 	{
-		int[][] pieces = gameService.getPieces();
-		int[] current = gameService.findPiece(e.getX(), e.getY());
+		int[] current = GameKit.findPiece(e.getX(), e.getY());
 		
 		if(current == null || pieces[current[0]][current[1]] == 0)
 			return;
@@ -89,7 +84,7 @@ public class MainActivity extends Activity
 		
 		if(selected != null)
 		{
-			List<Point> linkInfo = gameService.link(selected, current);
+			List<Point> linkInfo = GameKit.link(selected, current,pieces);
 			
 			if(linkInfo == null)
 			{
@@ -122,12 +117,12 @@ public class MainActivity extends Activity
 
 	private void gameViewTouchUp(MotionEvent e)
 	{
-		if(!gameService.hasPieces())
+		if(!GameKit.hasPieces(pieces))
 		{
 			Toast.makeText(getApplicationContext(), "ÄúÓ®À²£¡£¡", Toast.LENGTH_LONG).show();
 			
-			gameService.start(0);
-			gameView.setPieces(gameService.getPieces());
+			pieces = GameKit.start(0);
+			gameView.setPieces(pieces);
 			gameView.postInvalidate();
 		}
 	}
