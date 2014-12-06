@@ -1,6 +1,7 @@
 package git.sasure.Kit;
 
 import git.sasure.Abs.SquareArrangement;
+import git.sasure.linkgame.GameView;
 import git.sasure.linkgame.Piece;
 import git.sasure.linkgame.R;
 import git.sasure.sub.centerArr;
@@ -27,6 +28,7 @@ public class GameKit
 {
 	private static List<Integer> imageValues = getImageValue();
 	private static List<SquareArrangement> myArrs = null;
+	private static GameView gameView = null;
 	
 	public static int Game_X_begin = 0;
 	public static int Game_Y_begin = 0;
@@ -42,6 +44,11 @@ public class GameKit
 		
 		myArrs.add(new centerArr());
 		myArrs.add(new fullArr());
+	}
+	
+	public static void setGameView(GameView gameView)
+	{
+		GameKit.gameView = gameView;
 	}
 	
 	public static int[][] start(int i)
@@ -61,6 +68,9 @@ public class GameKit
 		{
 			pieces = myArrs.get(i).createPieces();
 		}
+		
+		gameView.setPieces(pieces);
+		gameView.postInvalidate();
 		
 		return pieces;
 	}
@@ -274,13 +284,13 @@ public class GameKit
 	{
 		try 
 		{
-			Field[] imageFields = R.drawable.class.getFields();
+			Field[] imageFields = R.color.class.getFields();
 			List<Integer> imageValues = new ArrayList<>();
 			
 			for(Field field : imageFields)
 				if(field.getName().startsWith("p_"))
 				{
-					imageValues.add(field.getInt(R.drawable.class));
+					imageValues.add(field.getInt(R.color.class));
 				}
 			return imageValues;
 		}
@@ -342,7 +352,7 @@ public class GameKit
 	 */
 	public static Point getPoint(int i, int j) 
 	{
-		return new Point(Game_X_begin + i * PieceWidth, Game_Y_begin + j * PieceHeidth);
+		return new Point(Game_X_begin + i * PieceWidth + PieceWidth / 2, Game_Y_begin + j * PieceHeidth + PieceHeidth / 2);
 	}
 	
 	public static  boolean hasPieces(int[][] pieces)
@@ -411,7 +421,7 @@ public class GameKit
 		return index;
 	}
 	
-	private static Point getLinkPoint(Piece current)
+	public static Point getLinkPoint(Piece current)
 	{
 		return new Point(Game_X_begin + current.i * PieceWidth + PieceWidth / 2, Game_Y_begin + current.j * PieceHeidth + PieceHeidth / 2);
 	}

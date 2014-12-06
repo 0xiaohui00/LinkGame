@@ -39,7 +39,7 @@ public class GameView extends View
 		this.context = context;
 		
 		paint = new Paint();//初始化画笔并设置画笔属性
-		paint.setColor(Color.GREEN);
+		paint.setColor(Color.BLACK);
 		paint.setStrokeWidth(5);
 		
 		checkedBox = GameKit.getCheckedBox(context);//获取选中框的图片
@@ -73,6 +73,11 @@ public class GameView extends View
 		this.pieces = pieces;
 	}
 	
+	public int[][] getPieces()
+	{
+		return this.pieces;
+	}
+	
 	/**
 	 * 设置选中框位置的方法
 	 * @param checkedPoint
@@ -93,15 +98,22 @@ public class GameView extends View
 		if(pieces == null)//如果尚无方块的信息，直接返回
 			return;
 		
+		Paint paint = new Paint();
+		paint.setAntiAlias(true);          //防锯齿
 		for(int i = 0;i < GameKit.GameXN;++i)
 			for(int j = 0;j < GameKit.GameYN;++j)
 			{
 				if(pieces[i][j] == 0)
 					continue;
 				
-				Bitmap piece = BitmapFactory.decodeResource(context.getResources(), pieces[i][j]);
+//				Bitmap piece = BitmapFactory.decodeResource(context.getResources(), pieces[i][j]);
+//				Point point = GameKit.getPoint(i, j);
+//				canvas.drawBitmap(piece,point.x, point.y, null);
+				
 				Point point = GameKit.getPoint(i, j);
-				canvas.drawBitmap(piece,point.x, point.y, null);
+				
+				paint.setColor(context.getResources().getColor(pieces[i][j]));
+				canvas.drawCircle(point.x, point.y, GameKit.PieceWidth / 2, paint);
 			}
 		
 		if(links != null)
@@ -110,7 +122,7 @@ public class GameView extends View
 		if(checkedPiece != null && checkedBox != null)
 		{
 			Point checked = GameKit.getPoint(checkedPiece.i, checkedPiece.j);
-			canvas.drawBitmap(checkedBox, checked.x, checked.y,null);
+			canvas.drawBitmap(checkedBox, checked.x - GameKit.PieceWidth / 2, checked.y - GameKit.PieceHeidth / 2,null);
 		}
 	}
 	
