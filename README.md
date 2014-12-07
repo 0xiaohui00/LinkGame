@@ -2,8 +2,8 @@
 ========
 一款连连看软件，将持续更新<br>
 部分代码参考自李刚的《疯狂android讲义》，在这里对他表示感谢,也欢迎各位对代码进行改良<br>
-游戏的安装包在https://github.com/Sasure/LinkGame/blob/master/bin/LinkGame.apk<br>
---------
+游戏的安装包在https://github.com/Sasure/LinkGame/blob/master/bin/LinkGame.apk<br><br><br>
+================================================================================
 在2014/12/7更新<br>
 加入了动画元素，定位逐渐清晰<br>
 ![](https://github.com/Sasure/LinkGame/raw/master/tmp/update12_7.png)<br><br><br>
