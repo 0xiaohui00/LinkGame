@@ -5,13 +5,11 @@ import git.sasure.Kit.GameKit;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
-import android.util.AttributeSet;
 import android.view.View;
 
 /**
@@ -22,35 +20,61 @@ import android.view.View;
  */
 public class GameView extends View
 {
-	private Paint paint;//画笔
+	private Paint linkpaint;//画笔
+	private Paint piecepaint;
+	private Paint selectedpaint;
+	private Paint pathpaint;
+	private Path path;
 	private int[][] pieces;//其每个元素即每个方块，0即无，非0即有，每个非零的值代表一个的图片ID
-	private Bitmap checkedBox;//选中框的图片
-	private Piece checkedPiece;//选中框的位置
+//private Bitmap checkedBox;//选中框的图片
+	private Piece selectedPiece;//选中框的位置
 	private List<Point> links;//连接线的信息
 	private Context context;//保留包的信息
 	
 	/**
 	 * 唯一的构造函数
 	 */
-	public GameView(Context context, AttributeSet attrs)
+	public GameView(Context context)
 	{
-		super(context, attrs);
+		super(context);
 		
 		this.context = context;
 		
-		paint = new Paint();//初始化画笔并设置画笔属性
-		paint.setColor(Color.BLACK);
-		paint.setStrokeWidth(5);
+		linkpaint = new Paint();//初始化画笔并设置画笔属性
+		linkpaint.setColor(Color.GRAY);
+		linkpaint.setStrokeWidth(5);
 		
-		checkedBox = GameKit.getCheckedBox(context);//获取选中框的图片
+		piecepaint = new Paint();
+		piecepaint.setAntiAlias(true); 
+		piecepaint.setDither(true); 
 		
-		checkedPiece = null;
+		selectedpaint = new Paint();
+		selectedpaint.setAntiAlias(true); 
+		selectedpaint.setColor(Color.GRAY);
+		selectedpaint.setDither(true);
+		
+		pathpaint = new Paint();
+		pathpaint.setColor(Color.BLACK);
+		pathpaint.setStrokeWidth(2);
+		pathpaint.setStyle(Paint.Style.STROKE);
+		
+	//	checkedBox = GameKit.getCheckedBox(context);//获取选中框的图片
+		
+		selectedPiece = null;
 		links = null;
 		
-		int[] loca = new int[2];
-		this.getLocationOnScreen(loca);
+//		int[] loca = new int[2];
+//		this.getLocationOnScreen(loca);
+//		
+//		GameKit.setbeginloca(loca);
 		
-		GameKit.setbeginloca(loca);
+		path = new Path();
+		path.moveTo(0, 0);
+		path.lineTo( GameKit.GameWidth,0);
+		path.lineTo(GameKit.GameWidth,GameKit.GameHeight);
+		path.lineTo(0, GameKit.GameHeight);
+		path.close();
+		
 	}
 	
 	/**设置连接线信息
@@ -82,9 +106,9 @@ public class GameView extends View
 	 * 设置选中框位置的方法
 	 * @param checkedPoint
 	 */
-	public void setCheckedPiece(Piece checkedPiece)
+	public void setselectedPiece(Piece selectedPiece)
 	{
-		this.checkedPiece = checkedPiece;
+		this.selectedPiece = selectedPiece;
 	}
 	
 	/**绘制游戏界面
@@ -98,31 +122,27 @@ public class GameView extends View
 		if(pieces == null)//如果尚无方块的信息，直接返回
 			return;
 		
-		Paint paint = new Paint();
-		paint.setAntiAlias(true);          //防锯齿
+		canvas.drawPath(path, pathpaint);
+		
 		for(int i = 0;i < GameKit.GameXN;++i)
 			for(int j = 0;j < GameKit.GameYN;++j)
 			{
 				if(pieces[i][j] == 0)
 					continue;
 				
-//				Bitmap piece = BitmapFactory.decodeResource(context.getResources(), pieces[i][j]);
-//				Point point = GameKit.getPoint(i, j);
-//				canvas.drawBitmap(piece,point.x, point.y, null);
+				Point point = GameKit.getGameViewPoint(i, j);
 				
-				Point point = GameKit.getPoint(i, j);
-				
-				paint.setColor(context.getResources().getColor(pieces[i][j]));
-				canvas.drawCircle(point.x, point.y, GameKit.PieceWidth / 2, paint);
+				piecepaint.setColor(context.getResources().getColor(pieces[i][j]));
+				canvas.drawCircle(point.x, point.y, GameKit.PieceWidth / 4, piecepaint);
 			}
 		
 		if(links != null)
 			drawLine(canvas);
 		
-		if(checkedPiece != null && checkedBox != null)
+		if(selectedPiece != null)
 		{
-			Point checked = GameKit.getPoint(checkedPiece.i, checkedPiece.j);
-			canvas.drawBitmap(checkedBox, checked.x - GameKit.PieceWidth / 2, checked.y - GameKit.PieceHeidth / 2,null);
+			Point checked = GameKit.getGameViewPoint(selectedPiece.i, selectedPiece.j);
+			canvas.drawCircle(checked.x, checked.y, GameKit.PieceWidth / 8, selectedpaint);
 		}
 	}
 	
@@ -137,7 +157,7 @@ public class GameView extends View
 			Point current = links.get(i);
 			Point next = links.get(i + 1);
 
-			canvas.drawLine(current.x, current.y, next.x, next.y, paint);
+			canvas.drawLine(current.x, current.y, next.x, next.y, linkpaint);
 		}
 		
 		links = null;

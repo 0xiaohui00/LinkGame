@@ -3,16 +3,25 @@ package git.sasure.linkgame;
 import java.util.List;
 
 import git.sasure.Kit.GameKit;
-import android.R.integer;
+import git.sasure.sub.myFrameLayout;
+import git.sasure.sub.myRelativeLayout;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.FrameLayout;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -33,7 +42,9 @@ public class MainActivity extends Activity
 	private View thirdView;
 	private ImageButton start;
 	private myRelativeLayout rl;
-	private  FrameLayout fl;
+	private  myFrameLayout fl;
+	private int backcolor;
+	private int currentcolor;
 //	private int[][] pieces;
 	
 	private boolean isbegin = false;
@@ -42,22 +53,48 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+		WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);  
+		DisplayMetrics metric = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(metric);
+        
+        GameKit.screenWidth = metric.widthPixels;  // ÆÁÄ»¿í¶È£¨ÏñËØ£©
+        GameKit.screenHeight = metric.heightPixels;  // ÆÁÄ»¸ß¶È£¨ÏñËØ£©
+        
+        GameKit.Game_X_begin = 0;
+        
+        GameKit.PieceHeidth = GameKit.PieceWidth = ( GameKit.screenWidth - GameKit.Game_X_begin * 2 ) / GameKit.GameXN;
+        
+		GameKit.GameWidth = GameKit.GameXN * GameKit.PieceWidth;
+		GameKit.GameHeight = GameKit.GameYN * GameKit.PieceHeidth;
+        
+        GameKit.Game_Y_begin = GameKit.screenHeight / 2 - GameKit.GameHeight / 2;
+        
+		fl = new myFrameLayout(this);
 		
-		fl = new FrameLayout(this);
-		fl.setBackgroundColor(Color.BLACK);
+		backcolor = getResources().getColor(R.color.backcolor);
+		fl.setBackgroundColor(backcolor);
+		
 		firstView = View.inflate(this, R.layout.activity_main, null);
 		secondView = View.inflate(this, R.layout.below, null);
 		thirdView = View.inflate(this, R.layout.topside, null);
 		
-		gameView = (GameView) firstView.findViewById(R.id.gameView);
-		GameKit.setGameView(gameView);
-		
 		start = (ImageButton) thirdView.findViewById(R.id.start);
 		rl = (myRelativeLayout) thirdView.findViewById(R.id.third);
+		RelativeLayout mainlayout = (RelativeLayout) firstView.findViewById(R.id.mainlayout);
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(GameKit.GameWidth,GameKit.GameHeight);
+		lp.addRule(RelativeLayout.CENTER_IN_PARENT);
 		
-		fl.addView(firstView,0);
-		fl.addView(secondView,1);
-		fl.addView(thirdView,2);
+		gameView = new GameView(this);
+		gameView.setLayoutParams(lp);
+		
+		mainlayout.addView(gameView);
+		
+		GameKit.setGameView(gameView);
+		
+		fl.addView(firstView);
+		fl.addView(secondView);
+		fl.addView(thirdView);
 		
 		setContentView(fl);
 		
@@ -67,10 +104,41 @@ public class MainActivity extends Activity
 			public void onClick(View v) 
 			{
 				start.setEnabled(false);
-				
-				rl.startAnimator(fl);
 				isbegin = true;
-			//	GameKit.start(-1);
+				
+				ObjectAnimator spreadAnimator = ObjectAnimator.ofInt(rl, "radius", rl.getRadius(),rl.getendradius());
+				ObjectAnimator disappearAnimator = ObjectAnimator.ofFloat(rl, "alpha", 1 , 0);
+				AnimatorSet set = new AnimatorSet();
+				set.setInterpolator(new AccelerateDecelerateInterpolator ());
+				spreadAnimator.setDuration(500);
+				disappearAnimator.setDuration(500);
+				
+				set.play(spreadAnimator).before(disappearAnimator);
+				
+				spreadAnimator.addListener(new AnimatorListenerAdapter()
+				{
+					@Override
+					public void onAnimationEnd(Animator animation) 
+					{
+						fl.removeView(secondView);
+
+						GameKit.start(-1);
+					}
+				});
+				
+				disappearAnimator.addListener(new AnimatorListenerAdapter()
+				{
+					@Override
+					public void onAnimationEnd(Animator animation) 
+					{
+						fl.removeView(rl);
+						rl.setAlpha(1);
+						rl.resetRadius();
+						start.setEnabled(true);
+					}
+				});
+				
+				set.start();
 			}
 		});
 		
@@ -98,7 +166,6 @@ public class MainActivity extends Activity
 		super.onPause();
 	}
 	
-	
 	@Override
 	public void onStop()
 	{
@@ -116,11 +183,9 @@ public class MainActivity extends Activity
 
 	private void rebegin()
 	{
-		rl.setAlpha(1);
-		start.setEnabled(true);
 		start.setImageResource(R.drawable.rebegin);
-		fl.addView(secondView,1);
-		fl.addView(thirdView,2);
+		fl.addView(secondView);
+		fl.addView(thirdView);
 	}
 	
 	private void gameViewTouchDown(MotionEvent e)
@@ -131,7 +196,7 @@ public class MainActivity extends Activity
 		if(current == null || pieces[current.i][current.j] == 0)
 			return;
 		
-		gameView.setCheckedPiece(current);
+		gameView.setselectedPiece(current);
 		
 		if (selected == null)
 		{
@@ -160,9 +225,23 @@ public class MainActivity extends Activity
 	private void handleSuccessLink(List<Point> linkInfo, Piece selected,
 			Piece current, int[][] pieces)  
 	{
-		fl.setBackgroundColor(getApplicationContext().getResources().getColor(pieces[current.i][current.j]));
+		currentcolor = getApplicationContext().getResources().getColor(pieces[current.i][current.j]);
+		
+		if(backcolor == currentcolor)
+		{
+			backcolor = currentcolor = getResources().getColor(R.color.backcolor);
+		}
+		else
+		{
+			backcolor = currentcolor;
+		}
+		
+		Point point = GameKit.getScreenPoint(current.i, current.j);
+		
+		fl.startBackAnimator(point, currentcolor);
+		
 		gameView.setLinks(linkInfo);
-		gameView.setCheckedPiece(null);
+		gameView.setselectedPiece(null);
 		gameView.postInvalidate();
 		
 		pieces[current.i][current.j] = 0;
@@ -173,14 +252,13 @@ public class MainActivity extends Activity
 
 	private void gameViewTouchUp(MotionEvent e)
 	{
-		int[][] pieces = gameView.getPieces();
 		
-		if(!GameKit.hasPieces(pieces))
+		if(!GameKit.hasPieces())
 		{
 			Toast.makeText(getApplicationContext(), "ÄúÓ®À²£¡£¡", Toast.LENGTH_LONG).show();
 			
-			pieces = GameKit.start(-1);
-			fl.setBackgroundColor(Color.BLACK);
+		//	GameKit.start(-1);
+			//fl.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.backcolor));
 		}
 	}
 }

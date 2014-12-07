@@ -11,20 +11,22 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        public static final int backcolor=0x7f040002;
         public static final int centerbutton=0x7f040000;
-        public static final int p_blue=0x7f040004;
-        public static final int p_brown=0x7f040007;
-        public static final int p_cyan=0x7f040008;
-        public static final int p_gray=0x7f040009;
-        public static final int p_green=0x7f040002;
-        public static final int p_orange=0x7f040005;
-        public static final int p_pink=0x7f04000a;
-        public static final int p_purple=0x7f040006;
-        public static final int p_red=0x7f040003;
+        public static final int p_blue=0x7f040005;
+        public static final int p_brown=0x7f040008;
+        public static final int p_cyan=0x7f040009;
+        public static final int p_gray=0x7f04000a;
+        public static final int p_green=0x7f040003;
+        public static final int p_orange=0x7f040006;
+        public static final int p_pink=0x7f04000b;
+        public static final int p_purple=0x7f040007;
+        public static final int p_red=0x7f040004;
         public static final int tipbutton=0x7f040001;
     }
     public static final class dimen {
         public static final int centerbutton=0x7f050000;
+        public static final int piecewidth=0x7f050002;
         public static final int tipbutton=0x7f050001;
     }
     public static final class drawable {
@@ -41,7 +43,7 @@ public final class R {
     public static final class id {
         public static final int anyelse=0x7f080003;
         public static final int firstFrame=0x7f080001;
-        public static final int gameView=0x7f080000;
+        public static final int mainlayout=0x7f080000;
         public static final int none=0x7f080002;
         public static final int start=0x7f080005;
         public static final int third=0x7f080004;

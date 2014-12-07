@@ -14,10 +14,9 @@ import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.util.Log;
+
 
 /**
  * 
@@ -32,10 +31,16 @@ public class GameKit
 	
 	public static int Game_X_begin = 0;
 	public static int Game_Y_begin = 0;
+	public static int GameWidth = 0;
+	public static int GameHeight = 0;
 	public static int GameXN = 7;//连连看横排有GameXN个方块
 	public static int GameYN = 8;//连连看竖排有GameYN个方块
-	public static int PieceWidth = 100;//每个方块的宽度
-	public static int PieceHeidth = 100;//每个方块的高度
+	public static int PieceWidth = 0;//每个方块的宽度
+	public static int PieceHeidth = 0;//每个方块的高度
+	public static int screenWidth = 0;
+	public static int screenHeight = 0;
+//	public static int backgroundColor = 0;
+//	public static int selectedColor = 0;
 
 	//加载排列方式
 	static
@@ -334,29 +339,38 @@ public class GameKit
 		return result;
 	}
 	
-	/**
-	 * 获取选中框的图片
-	 */
-	public static Bitmap getCheckedBox(Context context)
-	{
-		Bitmap box = BitmapFactory.decodeResource(context.getResources(), R.drawable.checkedbox);
-		
-		return box;
-	}
+//	/**
+//	 * 获取选中框的图片
+//	 */
+//	public static Bitmap getCheckedBox(Context context)
+//	{
+//		Bitmap box = BitmapFactory.decodeResource(context.getResources(), R.drawable.checkedbox);
+//		
+//		return box;
+//	}
 	
-	/**通过二维数组的i，j获取该方块左上角在屏幕上的坐标
+	/**通过二维数组的i，j获取该方块中心点在屏幕上的坐标
 	 * 
 	 * @param i
 	 * @param j
 	 * @return point
 	 */
-	public static Point getPoint(int i, int j) 
+	public static Point getGameViewPoint(int i, int j) 
 	{
-		return new Point(Game_X_begin + i * PieceWidth + PieceWidth / 2, Game_Y_begin + j * PieceHeidth + PieceHeidth / 2);
+	//	Log.i("test","begin:" + Game_X_begin + "  " + Game_Y_begin);
+	//	Log.i("test", "piece" + PieceWidth +" " + PieceHeidth);
+		return new Point(i * PieceWidth + PieceWidth / 2,j * PieceHeidth + PieceHeidth / 2);
+	}
+
+	public static Point getScreenPoint(int i,int j)
+	{
+		return new Point(Game_X_begin + i * PieceWidth + PieceWidth / 2,Game_Y_begin + j * PieceHeidth + PieceHeidth / 2);
 	}
 	
-	public static  boolean hasPieces(int[][] pieces)
+	public static  boolean hasPieces()
 	{
+		int[][] pieces = gameView.getPieces();
+	
 		for(int i = 0;i < pieces.length;++i)
 			for(int j = 0;j < pieces[i].length;++j)
 				if(pieces[i][j] != 0)
@@ -378,8 +392,8 @@ public class GameKit
 	{
 		Piece current  = new Piece();
 		
-		int touchX = (int) X - Game_X_begin;
-		int touchY = (int) Y - Game_Y_begin;
+		int touchX = (int) X;
+		int touchY = (int) Y;
 		
 		if(touchX < 0 || touchY < 0)
 			return null;
@@ -421,10 +435,10 @@ public class GameKit
 		return index;
 	}
 	
-	public static Point getLinkPoint(Piece current)
-	{
-		return new Point(Game_X_begin + current.i * PieceWidth + PieceWidth / 2, Game_Y_begin + current.j * PieceHeidth + PieceHeidth / 2);
-	}
+//	public static Point getLinkPoint(Piece current)
+//	{
+//		return new Point(Game_X_begin + current.i * PieceWidth + PieceWidth / 2, Game_Y_begin + current.j * PieceHeidth + PieceHeidth / 2);
+//	}
 	
 	/**
 	 * 传入可变长的形参
@@ -435,10 +449,10 @@ public class GameKit
 	{
 		List<Point> ArrPoint = new ArrayList<>();
 		
-		for(Piece point : pieces)
+		for(Piece piece : pieces)
 		{
-			Point xy = getLinkPoint(point);
-			ArrPoint.add(xy);
+			Point point = getGameViewPoint(piece.i,piece.j);
+			ArrPoint.add(point);
 		}
 		return ArrPoint;
 	}

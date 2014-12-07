@@ -2,4 +2,5 @@
 <resources>
     <color name="centerbutton">#14e715</color>
     <color name="tipbutton">#ff9800</color>
+    <color name="backcolor">#ffdbdbdd</color>
 </resources>

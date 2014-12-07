@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="p_green">#ff00ff00</color>
-    <color name="p_red">#ffff0000</color>
-    <color name="p_blue">#ff0000ff</color>
-    <color name="p_orange">#ffff9900</color>
-    <color name="p_purple">#ff9933ff</color>
+    <color name="p_green">#ff74c193</color>
+    <color name="p_red">#ffdc4b58</color>
+    <color name="p_blue">#ff6f90bd</color>
+    <color name="p_orange">#fffdcc6d</color>
+    <color name="p_purple">#ffa1557b</color>
     <color name="p_brown">#ff996600</color>
     <color name="p_cyan">#ff66ff66</color>
     <color name="p_gray">#ffcccc99</color>
