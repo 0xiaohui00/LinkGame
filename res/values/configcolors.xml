@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="centerbutton">#14e715</color>
-    <color name="tipbutton">#ff9800</color>
-    <color name="backcolor">#ffdbdbdd</color>
+    <color name="centerbutton">#66BB6A</color>
+    <color name="tipbutton">#FF7043</color>
+    <color name="backcolor">#ffBDBDBD</color>
 </resources>

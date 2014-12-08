@@ -6,13 +6,19 @@
     android:layout_height="match_parent"
     android:background="#00ffffff" >
     
+    	<ImageView
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerInParent="true"
+	    android:src="@drawable/startbackground"
+	    />
+    	
     	<ImageButton
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/startbackground"
-        android:src="@drawable/start" />
-
-
+        android:src="@drawable/start" 
+        android:background="#00ffffff"
+        />
 </git.sasure.sub.myRelativeLayout>

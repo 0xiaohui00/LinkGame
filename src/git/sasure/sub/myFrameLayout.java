@@ -16,13 +16,14 @@ import android.widget.FrameLayout;
 
 public class myFrameLayout extends FrameLayout 
 {
-	private Point selectedPoint  = null;
+//	private Point selectedPoint  = null;
+	private int pointX;
+	private int pointY;
 	private int radius;
 	private Paint paint;
 	private int height;
 	private int width;
-	private boolean successlink = false;
-	boolean i = false;
+//	private boolean successlink = false;
 	public myFrameLayout(Context context) 
 	{
 		super(context);
@@ -38,27 +39,18 @@ public class myFrameLayout extends FrameLayout
 	@Override
 	public void onDraw(Canvas canvas)
 	{
-		super.onDraw(canvas);
+	//	super.onDraw(canvas);
 		
-		
-		if(successlink == true)
-		{
-			canvas.drawCircle(selectedPoint.x, selectedPoint.y, radius, paint);
-			
-			if(i == false)
-			{
-				i =true;
-			Log.i("test", selectedPoint.x+" point " +selectedPoint.y);
-			}
-		}
+		canvas.drawCircle(pointX, pointY, radius, paint);
 	}
 	
 	public void startBackAnimator(Point selectedPoint,final int color)
 	{
-		successlink = true;
+	//	successlink = true;
 		paint.setColor(color);
-		i = false;
-		this.selectedPoint = selectedPoint;
+		
+		pointX = selectedPoint.x;
+		pointY = selectedPoint.y;
 		
 		int biggerwidth = selectedPoint.x > width - selectedPoint.x ? selectedPoint.x : width - selectedPoint.x;
 		int biggerheight = selectedPoint.y > height - selectedPoint.y ? selectedPoint.y : height - selectedPoint.y;
@@ -78,7 +70,7 @@ public class myFrameLayout extends FrameLayout
 				
 				if(!GameKit.hasPieces())
 				{
-					startBackAnimator(new Point(GameKit.screenWidth / 2, 0), 0xffdbdbdd);
+					startBackAnimator(new Point(GameKit.screenWidth / 2, 0), 0xffBDBDBD);
 					GameKit.start(-1);
 				}
 			}

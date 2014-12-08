@@ -1,6 +1,7 @@
-package git.sasure.linkgame;
+package git.sasure.sub;
 
 import git.sasure.Kit.GameKit;
+import git.sasure.linkgame.Piece;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -142,6 +144,7 @@ public class GameView extends View
 		if(selectedPiece != null)
 		{
 			Point checked = GameKit.getGameViewPoint(selectedPiece.i, selectedPiece.j);
+		//	Log.i("test",checked.x +"checked" + (checked.y +GameKit.Game_Y_begin));
 			canvas.drawCircle(checked.x, checked.y, GameKit.PieceWidth / 8, selectedpaint);
 		}
 	}

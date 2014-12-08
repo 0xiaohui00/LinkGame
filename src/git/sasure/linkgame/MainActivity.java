@@ -3,9 +3,14 @@ package git.sasure.linkgame;
 import java.util.List;
 
 import git.sasure.Kit.GameKit;
+import git.sasure.sub.GameView;
+import git.sasure.sub.PointEvaluator;
+import git.sasure.sub.animatorView;
+import git.sasure.sub.linkAnimatorView;
 import git.sasure.sub.myFrameLayout;
 import git.sasure.sub.myRelativeLayout;
 import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -14,6 +19,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -45,6 +51,9 @@ public class MainActivity extends Activity
 	private  myFrameLayout fl;
 	private int backcolor;
 	private int currentcolor;
+	private animatorView foreView;
+	private linkAnimatorView linkAn;
+	
 //	private int[][] pieces;
 	
 	private boolean isbegin = false;
@@ -76,6 +85,8 @@ public class MainActivity extends Activity
 		fl.setBackgroundColor(backcolor);
 		
 		firstView = View.inflate(this, R.layout.activity_main, null);
+		foreView = new animatorView(this);
+		linkAn = new linkAnimatorView(this);
 		secondView = View.inflate(this, R.layout.below, null);
 		thirdView = View.inflate(this, R.layout.topside, null);
 		
@@ -93,6 +104,7 @@ public class MainActivity extends Activity
 		GameKit.setGameView(gameView);
 		
 		fl.addView(firstView);
+	//	fl.addView(foreView);
 		fl.addView(secondView);
 		fl.addView(thirdView);
 		
@@ -132,6 +144,8 @@ public class MainActivity extends Activity
 					public void onAnimationEnd(Animator animation) 
 					{
 						fl.removeView(rl);
+						fl.addView(foreView);
+						fl.addView(linkAn);
 						rl.setAlpha(1);
 						rl.resetRadius();
 						start.setEnabled(true);
@@ -184,6 +198,8 @@ public class MainActivity extends Activity
 	private void rebegin()
 	{
 		start.setImageResource(R.drawable.rebegin);
+		fl.removeView(foreView);
+		fl.removeView(linkAn);
 		fl.addView(secondView);
 		fl.addView(thirdView);
 	}
@@ -195,6 +211,8 @@ public class MainActivity extends Activity
 		
 		if(current == null || pieces[current.i][current.j] == 0)
 			return;
+	//	Log.i("test",GameKit.getScreenPoint(current.i,current.j).x +"foreView" + GameKit.getScreenPoint(current.i,current.j).y);
+		foreView.startforeAnimator(GameKit.getScreenPoint(current.i,current.j));
 		
 		gameView.setselectedPiece(current);
 		
@@ -222,9 +240,11 @@ public class MainActivity extends Activity
 		}
 	}
 	
-	private void handleSuccessLink(List<Point> linkInfo, Piece selected,
-			Piece current, int[][] pieces)  
+	private void handleSuccessLink(List<Point> linkInfo, final Piece selected,
+			final Piece current, final int[][] pieces)  
 	{
+		AnimatorSet set = linkAnimatorSet(linkInfo);
+		
 		currentcolor = getApplicationContext().getResources().getColor(pieces[current.i][current.j]);
 		
 		if(backcolor == currentcolor)
@@ -236,20 +256,80 @@ public class MainActivity extends Activity
 			backcolor = currentcolor;
 		}
 		
-		Point point = GameKit.getScreenPoint(current.i, current.j);
+		final Point point = GameKit.getScreenPoint(current.i, current.j);
 		
-		fl.startBackAnimator(point, currentcolor);
+		linkAn.setPaintColor(currentcolor);
 		
-		gameView.setLinks(linkInfo);
-		gameView.setselectedPiece(null);
-		gameView.postInvalidate();
+		set.addListener(new AnimatorListenerAdapter() {
+			
+			@Override
+			public void onAnimationStart(Animator animation) 
+			{
+				pieces[selected.i][selected.j] = 0;
+				gameView.postInvalidate();
+			}
+			
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				pieces[current.i][current.j] = 0;
+				
+			//	if(pieces[current.i][current.j] == 0 && pieces[selected.i][selected.j] == 0)
+					gameView.setselectedPiece(null);
+				
+				gameView.postInvalidate();
+				fl.startBackAnimator(point, currentcolor);
+			}
+		});
+
+		set.setDuration(200);
+		set.setInterpolator(new DecelerateInterpolator());
 		
-		pieces[current.i][current.j] = 0;
-		pieces[selected.i][selected.j] = 0;
+		set.start();
+	//	gameView.setLinks(linkInfo);
+		
+//		gameView.postInvalidate();
+		
+	//	pieces[current.i][current.j] = 0;
+	//	pieces[selected.i][selected.j] = 0;
 		
 		this.selected = null;
 	}
 
+	private AnimatorSet linkAnimatorSet(List<Point> linkInfo)
+	{
+		AnimatorSet set = new AnimatorSet();
+		
+		switch(linkInfo.size())
+		{
+		case 2:
+			set.play(perstep(linkInfo.get(0), linkInfo.get(1)));
+			return set;
+			
+		case 3:
+		ObjectAnimator oa1 = perstep(linkInfo.get(0), linkInfo.get(1));
+		ObjectAnimator oa2 = perstep(linkInfo.get(1), linkInfo.get(2));
+		set.play(oa1).before(oa2);
+		return set;
+		
+		case 4:
+		ObjectAnimator oa3 = perstep(linkInfo.get(0), linkInfo.get(1));
+		ObjectAnimator oa4 = perstep(linkInfo.get(1), linkInfo.get(2));
+		ObjectAnimator oa5 = perstep(linkInfo.get(2), linkInfo.get(3));
+		set.play(oa3).before(oa4);
+		set.play(oa5).after(oa4);
+		
+		return set;
+		}
+		return set;
+	}
+	
+	private ObjectAnimator perstep(Point current,Point next)
+	{
+		ObjectAnimator oa = ObjectAnimator.ofObject(linkAn, "point", new PointEvaluator(), current,next);
+		
+		return oa;
+	}
+	
 	private void gameViewTouchUp(MotionEvent e)
 	{
 		

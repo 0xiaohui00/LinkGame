@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="centerbutton">100dp</dimen>
-    <dimen name="tipbutton">10dp</dimen>
+    <dimen name="centerbutton">225dp</dimen>
+    <dimen name="tipbutton">80dp</dimen>
     <dimen name="piecewidth">50dp</dimen>
 </resources>

@@ -16,12 +16,17 @@ public final class R {
         public static final int p_blue=0x7f040005;
         public static final int p_brown=0x7f040008;
         public static final int p_cyan=0x7f040009;
+        public static final int p_deep_purple=0x7f040010;
         public static final int p_gray=0x7f04000a;
         public static final int p_green=0x7f040003;
+        public static final int p_indigo=0x7f04000c;
+        public static final int p_lime=0x7f04000e;
         public static final int p_orange=0x7f040006;
         public static final int p_pink=0x7f04000b;
         public static final int p_purple=0x7f040007;
         public static final int p_red=0x7f040004;
+        public static final int p_teal=0x7f04000d;
+        public static final int p_yellow=0x7f04000f;
         public static final int tipbutton=0x7f040001;
     }
     public static final class dimen {
@@ -41,10 +46,10 @@ public final class R {
         public static final int title=0x7f020008;
     }
     public static final class id {
-        public static final int anyelse=0x7f080003;
+        public static final int anyelse=0x7f080002;
         public static final int firstFrame=0x7f080001;
         public static final int mainlayout=0x7f080000;
-        public static final int none=0x7f080002;
+        public static final int none=0x7f080003;
         public static final int start=0x7f080005;
         public static final int third=0x7f080004;
     }

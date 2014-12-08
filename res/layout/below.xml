@@ -13,14 +13,13 @@
         android:layout_marginBottom="20dp"
         android:background="#00ffffff" >
 
-        <ImageButton
-            android:id="@+id/none"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="30dp"
-            android:background="@drawable/tipbackground"
-            android:src="@drawable/none" />
+<!--         <ImageView -->
+<!--             android:id="@+id/imageView1" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_alignParentLeft="true" -->
+<!--             android:layout_marginLeft="30dp" -->
+<!--             android:src="@drawable/tipbackground" /> -->
 
         <ImageButton
             android:id="@+id/anyelse"
@@ -30,6 +29,16 @@
             android:layout_marginRight="30dp"
             android:background="@drawable/tipbackground"
             android:src="@drawable/anyelse" />
+
+        <ImageButton
+            android:id="@+id/none"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/tipbackground"
+            android:src="@drawable/none" />
+
     </RelativeLayout>
 
 <!--     <ImageView -->

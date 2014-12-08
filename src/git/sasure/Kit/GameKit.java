@@ -1,9 +1,9 @@
 package git.sasure.Kit;
 
 import git.sasure.Abs.SquareArrangement;
-import git.sasure.linkgame.GameView;
 import git.sasure.linkgame.Piece;
 import git.sasure.linkgame.R;
+import git.sasure.sub.GameView;
 import git.sasure.sub.centerArr;
 import git.sasure.sub.fullArr;
 
@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.util.Log;
 
@@ -451,7 +450,7 @@ public class GameKit
 		
 		for(Piece piece : pieces)
 		{
-			Point point = getGameViewPoint(piece.i,piece.j);
+			Point point = getScreenPoint(piece.i,piece.j);
 			ArrPoint.add(point);
 		}
 		return ArrPoint;

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="p_green">#ff74c193</color>
-    <color name="p_red">#ffdc4b58</color>
-    <color name="p_blue">#ff6f90bd</color>
-    <color name="p_orange">#fffdcc6d</color>
-    <color name="p_purple">#ffa1557b</color>
-    <color name="p_brown">#ff996600</color>
-    <color name="p_cyan">#ff66ff66</color>
+    <color name="p_red">#ffEF5350</color>
+    <color name="p_blue">#ff42A5F5</color>
+    <color name="p_orange">#ffFFA726</color>
+    <color name="p_purple">#ffAB47BC</color>
+    <color name="p_brown">#ffA1887F</color>
+    <color name="p_cyan">#ff0097A7</color>
     <color name="p_gray">#ffcccc99</color>
-    <color name="p_pink">#ffff9966</color>
+    <color name="p_pink">#ffEC407A</color>
+    <color name="p_indigo">#ff5C6BC0</color>
+    <color name="p_teal">#ff009688</color>
+    <color name="p_lime">#ffCDDC39</color>
+    <color name="p_yellow">#ffFFEB3B</color>
+    <color name="p_deep_purple">#ff7E57C2</color>
 </resources>
