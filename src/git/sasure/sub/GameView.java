@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
 
@@ -26,13 +27,13 @@ public class GameView extends View
 	private Paint piecepaint;
 	private Paint selectedpaint;
 	private Paint pathpaint;
-	private Path path;
+//	private Path path;
 	private int[][] pieces;//其每个元素即每个方块，0即无，非0即有，每个非零的值代表一个的图片ID
 //private Bitmap checkedBox;//选中框的图片
 	private Piece selectedPiece;//选中框的位置
 //	private List<Point> links;//连接线的信息
 	private Context context;//保留包的信息
-	
+	RectF ovalf = new RectF(0, 0, GameKit.GameWidth, GameKit.GameHeight);// 设置个新的长方形  
 	/**
 	 * 唯一的构造函数
 	 */
@@ -52,12 +53,14 @@ public class GameView extends View
 		
 		selectedpaint = new Paint();
 		selectedpaint.setAntiAlias(true); 
-		selectedpaint.setColor(Color.GRAY);
+		selectedpaint.setColor(Color.BLACK);
 		selectedpaint.setDither(true);
 		
 		pathpaint = new Paint();
-		pathpaint.setColor(Color.BLACK);
-		pathpaint.setStrokeWidth(2);
+		pathpaint.setColor(Color.GRAY);
+		pathpaint.setStrokeWidth(3);
+		pathpaint.setAntiAlias(true);
+		pathpaint.setDither(true);
 		pathpaint.setStyle(Paint.Style.STROKE);
 		
 	//	checkedBox = GameKit.getCheckedBox(context);//获取选中框的图片
@@ -70,12 +73,12 @@ public class GameView extends View
 //		
 //		GameKit.setbeginloca(loca);
 		
-		path = new Path();
-		path.moveTo(0, 0);
-		path.lineTo( GameKit.GameWidth,0);
-		path.lineTo(GameKit.GameWidth,GameKit.GameHeight);
-		path.lineTo(0, GameKit.GameHeight);
-		path.close();
+//		path = new Path();
+//		path.moveTo(0, 0);
+//		path.lineTo( GameKit.GameWidth,0);
+//		path.lineTo(GameKit.GameWidth,GameKit.GameHeight);
+//		path.lineTo(0, GameKit.GameHeight);
+//		path.close();
 		
 	}
 	
@@ -120,11 +123,12 @@ public class GameView extends View
 	protected void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
-		
+		canvas.drawRoundRect(ovalf, 60, 60, pathpaint);
 		if(pieces == null)//如果尚无方块的信息，直接返回
 			return;
 		
-		canvas.drawPath(path, pathpaint);
+	//	canvas.drawPath(path, pathpaint);
+		
 		
 		for(int i = 0;i < GameKit.GameXN;++i)
 			for(int j = 0;j < GameKit.GameYN;++j)

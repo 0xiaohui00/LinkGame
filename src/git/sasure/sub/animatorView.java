@@ -50,7 +50,7 @@ public class animatorView extends View
                 //半径变化  
                 ObjectAnimator.ofInt(this, radiuProperty, 0, GameKit.PieceWidth - GameKit.PieceWidth / 4),
                 //颜色变化 黑色到透明  
-                ObjectAnimator.ofObject(this, mForegroundColorProperty, new ArgbEvaluator(), Color.GRAY, Color.TRANSPARENT)  
+                ObjectAnimator.ofObject(this, mForegroundColorProperty, new ArgbEvaluator(), Color.BLACK, Color.TRANSPARENT)  
         );  
         // 设置时间  
         set.setDuration(500);  

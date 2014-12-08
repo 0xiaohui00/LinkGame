@@ -81,7 +81,7 @@ public class MainActivity extends Activity
         
 		fl = new myFrameLayout(this);
 		
-		backcolor = getResources().getColor(R.color.backcolor);
+		GameKit.defoultbackcolor = backcolor = getResources().getColor(R.color.backcolor);
 		fl.setBackgroundColor(backcolor);
 		
 		firstView = View.inflate(this, R.layout.activity_main, null);
@@ -103,8 +103,11 @@ public class MainActivity extends Activity
 		
 		GameKit.setGameView(gameView);
 		
+//		gameView.setFocusable(false);
+		
 		fl.addView(firstView);
-	//	fl.addView(foreView);
+		fl.addView(foreView);
+		fl.addView(linkAn);
 		fl.addView(secondView);
 		fl.addView(thirdView);
 		
@@ -133,8 +136,9 @@ public class MainActivity extends Activity
 					public void onAnimationEnd(Animator animation) 
 					{
 						fl.removeView(secondView);
-
-						GameKit.start(-1);
+						
+						if(!GameKit.hasPieces())
+							GameKit.start(-1);
 					}
 				});
 				
@@ -144,11 +148,12 @@ public class MainActivity extends Activity
 					public void onAnimationEnd(Animator animation) 
 					{
 						fl.removeView(rl);
-						fl.addView(foreView);
-						fl.addView(linkAn);
+//						fl.addView(foreView);
+//						fl.addView(linkAn);
 						rl.setAlpha(1);
 						rl.resetRadius();
 						start.setEnabled(true);
+//						gameView.setFocusable(true);
 					}
 				});
 				
@@ -160,7 +165,12 @@ public class MainActivity extends Activity
 		{
 			@Override
 			public boolean onTouch(View v, MotionEvent e) 
-			{				
+			{		
+				int[][] pieces = gameView.getPieces();
+				
+				if(pieces == null)
+					return true;
+					
 				if (e.getAction() == MotionEvent.ACTION_DOWN)
 				{
 					gameViewTouchDown(e);
@@ -190,16 +200,27 @@ public class MainActivity extends Activity
 	public void onResume()
 	{
 		if(isbegin == true)
+		{
+			start.setImageResource(R.drawable.rebegin);
+			
 			rebegin();
+		}
 		
 		super.onResume();
 	}
 
+	@Override
+	public void onRestart()
+	{
+		super.onRestart();
+		start.setImageResource(R.drawable.start);
+	}
+	
 	private void rebegin()
 	{
-		start.setImageResource(R.drawable.rebegin);
-		fl.removeView(foreView);
-		fl.removeView(linkAn);
+//		gameView.setFocusable(false);
+//		fl.removeView(foreView);
+//		fl.removeView(linkAn);
 		fl.addView(secondView);
 		fl.addView(thirdView);
 	}
@@ -249,7 +270,7 @@ public class MainActivity extends Activity
 		
 		if(backcolor == currentcolor)
 		{
-			backcolor = currentcolor = getResources().getColor(R.color.backcolor);
+			backcolor = currentcolor = GameKit.defoultbackcolor;
 		}
 		else
 		{

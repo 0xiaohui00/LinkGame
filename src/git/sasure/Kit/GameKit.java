@@ -38,8 +38,7 @@ public class GameKit
 	public static int PieceHeidth = 0;//每个方块的高度
 	public static int screenWidth = 0;
 	public static int screenHeight = 0;
-//	public static int backgroundColor = 0;
-//	public static int selectedColor = 0;
+	public static int defoultbackcolor = 0;
 
 	//加载排列方式
 	static
@@ -49,6 +48,7 @@ public class GameKit
 		myArrs.add(new centerArr());
 		myArrs.add(new fullArr());
 	}
+	
 	
 	public static void setGameView(GameView gameView)
 	{
@@ -369,14 +369,16 @@ public class GameKit
 	public static  boolean hasPieces()
 	{
 		int[][] pieces = gameView.getPieces();
-	
-		for(int i = 0;i < pieces.length;++i)
-			for(int j = 0;j < pieces[i].length;++j)
-				if(pieces[i][j] != 0)
-					return true;
+		
+		if(pieces != null)
+			for(int i = 0;i < pieces.length;++i)
+				for(int j = 0;j < pieces[i].length;++j)
+					if(pieces[i][j] != 0)
+						return true;
 		
 		return false;
 	}
+	
 	/**
 	 *设置连连看界面相对与屏幕的坐标轴 
 	 * @param loca
