@@ -16,10 +16,11 @@ public final class R {
         public static final int p_blue=0x7f040005;
         public static final int p_brown=0x7f040008;
         public static final int p_cyan=0x7f040009;
-        public static final int p_deep_purple=0x7f040010;
-        public static final int p_gray=0x7f04000a;
+        public static final int p_deep_orange=0x7f040010;
+        public static final int p_deep_purple=0x7f040011;
         public static final int p_green=0x7f040003;
         public static final int p_indigo=0x7f04000c;
+        public static final int p_light_brown=0x7f04000a;
         public static final int p_lime=0x7f04000e;
         public static final int p_orange=0x7f040006;
         public static final int p_pink=0x7f04000b;

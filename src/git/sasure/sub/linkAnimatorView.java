@@ -33,9 +33,9 @@ public class linkAnimatorView extends View
 	{
 		super.onDraw(canvas);
 		
-		canvas.save();
+	//	canvas.save();
 		canvas.drawCircle(pointX, pointY, radius, paint);
-		canvas.restore();
+	//	canvas.restore();
 		
 		radius = 0;
 	}

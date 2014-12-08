@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="p_green">#ff74c193</color>
-    <color name="p_red">#ffEF5350</color>
-    <color name="p_blue">#ff42A5F5</color>
-    <color name="p_orange">#ffFFA726</color>
-    <color name="p_purple">#ffAB47BC</color>
-    <color name="p_brown">#ffA1887F</color>
-    <color name="p_cyan">#ff0097A7</color>
-    <color name="p_gray">#ffcccc99</color>
-    <color name="p_pink">#ffEC407A</color>
-    <color name="p_indigo">#ff5C6BC0</color>
+    <color name="p_green">#ff66bb6a</color>
+    <color name="p_red">#ffef5350</color>
+    <color name="p_blue">#ff42a5f5</color>
+    <color name="p_orange">#ffffb74d</color>
+    <color name="p_purple">#ffab47bc</color>
+    <color name="p_brown">#ff8d6e63</color>
+    <color name="p_cyan">#ff4dd0e1</color>
+    <color name="p_light_brown">#ffcccc99</color>
+    <color name="p_pink">#ffec407a</color>
+    <color name="p_indigo">#ff5c6bc0</color>
     <color name="p_teal">#ff009688</color>
-    <color name="p_lime">#ffCDDC39</color>
-    <color name="p_yellow">#ffFFEB3B</color>
-    <color name="p_deep_purple">#ff7E57C2</color>
+    <color name="p_lime">#ffcddc39</color>
+    <color name="p_yellow">#ffffee58</color>
+    <color name="p_deep_orange">#ffff7043</color>
+    <color name="p_deep_purple">#ff7e57c2</color>
 </resources>

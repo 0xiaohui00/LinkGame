@@ -70,7 +70,7 @@ public class myFrameLayout extends FrameLayout
 				
 				if(!GameKit.hasPieces())
 				{
-					startBackAnimator(new Point(GameKit.screenWidth / 2, 0), 0xffBDBDBD);
+					startBackAnimator(new Point(GameKit.screenWidth / 2, 0), GameKit.defoultbackcolor);
 					GameKit.start(-1);
 				}
 			}

@@ -1,6 +1,8 @@
 package git.sasure.linkgame;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import git.sasure.Kit.GameKit;
 import git.sasure.sub.GameView;
@@ -20,6 +22,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -53,6 +56,7 @@ public class MainActivity extends Activity
 	private int currentcolor;
 	private animatorView foreView;
 	private linkAnimatorView linkAn;
+	private  Boolean isExit = false;  
 	
 //	private int[][] pieces;
 	
@@ -124,7 +128,7 @@ public class MainActivity extends Activity
 				ObjectAnimator spreadAnimator = ObjectAnimator.ofInt(rl, "radius", rl.getRadius(),rl.getendradius());
 				ObjectAnimator disappearAnimator = ObjectAnimator.ofFloat(rl, "alpha", 1 , 0);
 				AnimatorSet set = new AnimatorSet();
-				set.setInterpolator(new AccelerateDecelerateInterpolator ());
+				set.setInterpolator(new DecelerateInterpolator ());
 				spreadAnimator.setDuration(500);
 				disappearAnimator.setDuration(500);
 				
@@ -161,6 +165,7 @@ public class MainActivity extends Activity
 			}
 		});
 		
+		
 		gameView.setOnTouchListener(new OnTouchListener()
 		{
 			@Override
@@ -183,6 +188,47 @@ public class MainActivity extends Activity
 			}
 		});
 	}
+	
+	/** 
+	 * 菜单、返回键响应 
+	 */  
+	@Override  
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{  
+	    if(keyCode == KeyEvent.KEYCODE_BACK)  
+	       {    
+	           exitBy2Click();      //调用双击退出函数  
+	       }  
+	    return false;  
+	}  
+	
+	/** 
+	 * 双击退出函数 
+	 */ 
+	private void exitBy2Click() 
+	{  
+	    Timer tExit = null;  
+	    
+	    if (isExit == false) 
+	    {  
+	        isExit = true; // 准备退出  
+	        Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();  
+	        tExit = new Timer();  
+	        tExit.schedule(new TimerTask() 
+	        {  
+	            @Override  
+	            public void run() 
+	            {  
+	                isExit = false; // 取消退出  
+	            }  
+	        }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务  
+	  
+	    } else 
+	    {  
+	        finish();  
+	        System.exit(0);  
+	    }  
+	}  
 	
 	@Override
 	public void onPause()
@@ -287,16 +333,17 @@ public class MainActivity extends Activity
 			public void onAnimationStart(Animator animation) 
 			{
 				pieces[selected.i][selected.j] = 0;
-				gameView.setselectedPiece(null);
+				
 				gameView.postInvalidate();
 			}
 			
 			@Override
-			public void onAnimationEnd(Animator animation) {
+			public void onAnimationEnd(Animator animation) 
+			{
 				pieces[current.i][current.j] = 0;
 				
-			//	if(pieces[current.i][current.j] == 0 && pieces[selected.i][selected.j] == 0)
-					
+				if(pieces[selected.i][selected.j] == 0 && pieces[current.i][current.j] == 0)
+					gameView.setselectedPiece(null);
 				
 				gameView.postInvalidate();
 				fl.startBackAnimator(point, currentcolor);
