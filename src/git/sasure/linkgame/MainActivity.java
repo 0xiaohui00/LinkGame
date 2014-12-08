@@ -266,6 +266,7 @@ public class MainActivity extends Activity
 			public void onAnimationStart(Animator animation) 
 			{
 				pieces[selected.i][selected.j] = 0;
+				gameView.setselectedPiece(null);
 				gameView.postInvalidate();
 			}
 			
@@ -274,7 +275,7 @@ public class MainActivity extends Activity
 				pieces[current.i][current.j] = 0;
 				
 			//	if(pieces[current.i][current.j] == 0 && pieces[selected.i][selected.j] == 0)
-					gameView.setselectedPiece(null);
+					
 				
 				gameView.postInvalidate();
 				fl.startBackAnimator(point, currentcolor);

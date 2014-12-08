@@ -22,7 +22,7 @@ import android.view.View;
  */
 public class GameView extends View
 {
-	private Paint linkpaint;//画笔
+//	private Paint linkpaint;//画笔
 	private Paint piecepaint;
 	private Paint selectedpaint;
 	private Paint pathpaint;
@@ -30,7 +30,7 @@ public class GameView extends View
 	private int[][] pieces;//其每个元素即每个方块，0即无，非0即有，每个非零的值代表一个的图片ID
 //private Bitmap checkedBox;//选中框的图片
 	private Piece selectedPiece;//选中框的位置
-	private List<Point> links;//连接线的信息
+//	private List<Point> links;//连接线的信息
 	private Context context;//保留包的信息
 	
 	/**
@@ -42,9 +42,9 @@ public class GameView extends View
 		
 		this.context = context;
 		
-		linkpaint = new Paint();//初始化画笔并设置画笔属性
-		linkpaint.setColor(Color.GRAY);
-		linkpaint.setStrokeWidth(5);
+//		linkpaint = new Paint();//初始化画笔并设置画笔属性
+//		linkpaint.setColor(Color.GRAY);
+//		linkpaint.setStrokeWidth(5);
 		
 		piecepaint = new Paint();
 		piecepaint.setAntiAlias(true); 
@@ -63,7 +63,7 @@ public class GameView extends View
 	//	checkedBox = GameKit.getCheckedBox(context);//获取选中框的图片
 		
 		selectedPiece = null;
-		links = null;
+	//	links = null;
 		
 //		int[] loca = new int[2];
 //		this.getLocationOnScreen(loca);
@@ -84,10 +84,10 @@ public class GameView extends View
 	 * @param links
 	 * @return void
 	 */
-	public void setLinks(List<Point> links)
-	{
-		this.links = links;
-	}
+//	public void setLinks(List<Point> links)
+//	{
+//		this.links = links;
+//	}
 	
 	/**设置方块集合信息
 	 * 
@@ -138,8 +138,8 @@ public class GameView extends View
 				canvas.drawCircle(point.x, point.y, GameKit.PieceWidth / 4, piecepaint);
 			}
 		
-		if(links != null)
-			drawLine(canvas);
+//		if(links != null)
+//			drawLine(canvas);
 		
 		if(selectedPiece != null)
 		{
@@ -153,17 +153,17 @@ public class GameView extends View
 	 * 绘制连接线的方法
 	 * @param canvas
 	 */
-	private void drawLine(Canvas canvas)
-	{
-		for(int i = 0;i < links.size() - 1 && links.size() >= 2;++i)
-		{
-			Point current = links.get(i);
-			Point next = links.get(i + 1);
-
-			canvas.drawLine(current.x, current.y, next.x, next.y, linkpaint);
-		}
-		
-		links = null;
-		postInvalidate();
-	}
+//	private void drawLine(Canvas canvas)
+//	{
+//		for(int i = 0;i < links.size() - 1 && links.size() >= 2;++i)
+//		{
+//			Point current = links.get(i);
+//			Point next = links.get(i + 1);
+//
+//			canvas.drawLine(current.x, current.y, next.x, next.y, linkpaint);
+//		}
+//		
+//		links = null;
+//		postInvalidate();
+//	}
 }
