@@ -53,15 +53,15 @@ public class GameKit
 	{
 		myArrs = new ArrayList<>();
 		
-//		myArrs.add(new centerArr());
-//		myArrs.add(new fullArr());
-//		myArrs.add(new columnArr());
-//		myArrs.add(new oddcolumnArr());
-//		myArrs.add(new oddrowArr());
-//		myArrs.add(new rowArr());
-//		myArrs.add(new trigonArr());
-//		myArrs.add(new uptrigon());
-//		myArrs.add(new downtigonArr());
+		myArrs.add(new centerArr());
+		myArrs.add(new fullArr());
+		myArrs.add(new columnArr());
+		myArrs.add(new oddcolumnArr());
+		myArrs.add(new oddrowArr());
+		myArrs.add(new rowArr());
+		myArrs.add(new trigonArr());
+		myArrs.add(new uptrigon());
+		myArrs.add(new downtigonArr());
 		myArrs.add(new randArr());
 	}
 	
