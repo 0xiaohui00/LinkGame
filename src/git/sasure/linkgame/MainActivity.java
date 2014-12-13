@@ -17,13 +17,19 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.text.style.LineBackgroundSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,6 +43,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,6 +61,8 @@ public class MainActivity extends Activity implements OnClickListener
 	private static final int pause = 1;//当前处于暂停
 	private static final int playing = 2;
 	private static final int tobegin = 3;
+	
+//	private static final String MAX = "max";
 	
 	private static final int defaultTime = 60;
 	private static final int reducetime = 0x11;
@@ -73,6 +82,9 @@ public class MainActivity extends Activity implements OnClickListener
 	
 	private Vibrator vibrator;
 	
+	private SharedPreferences preferences;
+	private Editor editor;
+	
 	private View firstView;
 	private View secondView;
 	private View thirdView;
@@ -84,13 +96,11 @@ public class MainActivity extends Activity implements OnClickListener
 	private ImageView rule;//规则
 	private ImageView addTime;//加时
 	private ImageView supspend;//暂停
-//	private ImageView ring;//音乐
-//	private ImageView vibrate;//振动
 	private ImageView sheffle;//洗牌
 	private TextView gradeTextView;//分数
 	private TextView maxgradeTextView;//最高分
 	private ProgressBar schedule;
-	
+
 	private GameView gameView;
 	private myRelativeLayout rl;
 	private  myFrameLayout fl;
@@ -104,8 +114,10 @@ public class MainActivity extends Activity implements OnClickListener
 //	private Animation traslateAnimation2;
 	
 	private int time = defaultTime;
-	private AlertDialog.Builder lostDialog;
-	private AlertDialog.Builder successDialog;
+	private AlertDialog lostDialog;
+	private AlertDialog successDialog;
+	private AlertDialog ruleDialog;
+	private AlertDialog anyelseDialog;
 	private Timer timer;
 	private Handler handler = new Handler()
 	{
@@ -168,6 +180,13 @@ public class MainActivity extends Activity implements OnClickListener
         GameKit.defaultbackcolor = backcolor = getResources().getColor(R.color.backcolor);
         
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        
+         preferences = getSharedPreferences("game", Context.MODE_PRIVATE);
+//        int count = preferences.getInt("count", 0);
+         editor = preferences.edit();
+ //       Toast.makeText(this, count+"", Toast.LENGTH_LONG).show();
+ //       editor.putInt("count", ++count);
+ //      editor.commit();
 	}
 
 	/**
@@ -244,7 +263,8 @@ public class MainActivity extends Activity implements OnClickListener
 			}
 		});
 		
-		lostDialog = createDialog("Game Over","太可惜了...").setPositiveButton("重新开始", new DialogInterface.OnClickListener() 
+		View lostView = View.inflate(this, R.layout.overlayout, null);
+		lostDialog = createDialog(lostView).setPositiveButton("重新开始", new DialogInterface.OnClickListener() 
 		{
 			@Override
 			public void onClick(DialogInterface dialog, int which) 
@@ -257,10 +277,12 @@ public class MainActivity extends Activity implements OnClickListener
 				addtimecount = 0;
 				resetGrade();
 				startTime();
+				lostDialog.dismiss();
 			}
-		});
+		}).create();
 		
-		successDialog = createDialog("Success", "继续闯关吧！").setPositiveButton("继续", new DialogInterface.OnClickListener() 
+		View successView = View.inflate(this, R.layout.successlayout, null);
+		successDialog = createDialog(successView).setPositiveButton("继续", new DialogInterface.OnClickListener() 
 		{
 			@Override
 			public void onClick(DialogInterface dialog, int which) 
@@ -272,27 +294,60 @@ public class MainActivity extends Activity implements OnClickListener
 				gameView.setselectedPiece(null);
 				GameKit.start(-1);
 				startTime();
+				successDialog.dismiss();
 			}
-		});
+		}).create();
 		
+//		LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(R.layout.rulelayout, null);
+		View ruleView = View.inflate(this, R.layout.rulelayout, null);
+		
+		ruleDialog = createDialog(ruleView).setPositiveButton("确定", new DialogInterface.OnClickListener() 
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				ruleDialog.dismiss();
+			}
+		}).create();
+		
+		View anyelseView = View.inflate(this, R.layout.anyelselayout, null);
+		TextView author = (TextView) anyelseView.findViewById(R.id.toweibo);
+		TextView address = (TextView) anyelseView.findViewById(R.id.togithub);
+		
+		author.setOnClickListener(this);
+		address.setOnClickListener(this);
+		
+		anyelseDialog = createDialog(anyelseView).setPositiveButton("确定", new DialogInterface.OnClickListener() 
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				ruleDialog.dismiss();
+			}
+		}).create();
+		
+
+		
+		maxgrade = preferences.getInt("max", 0);
 		flashmaxView();
 		resetGrade();
 		
 		traslateAnimation = AnimationUtils.loadAnimation(this, R.anim.viewtranslate);
-//		traslateAnimation2 = AnimationUtils.loadAnimation(this, R.anim.viewtranslate2);
-		
-//		anyelse.startAnimation(traslateAnimation);
-//		rule.startAnimation(traslateAnimation);
-//		start.startAnimation(traslateAnimation);
+
 		thirdView.startAnimation(traslateAnimation);
 		secondView.startAnimation(traslateAnimation);
-	//	rl.startAnimation(traslateAnimation);
 	}
 	
-	private AlertDialog.Builder createDialog(String title,String message)
+//	private AlertDialog.Builder createDialog(String title,String message)
+//	{
+//		AlertDialog.Builder tmp = new AlertDialog.Builder(this).setTitle(title).setMessage(message).setCancelable(false);
+//		
+//		return tmp;
+//	}
+	
+	private AlertDialog.Builder createDialog(View view)
 	{
-		AlertDialog.Builder tmp = new AlertDialog.Builder(this).setTitle(title).setMessage(message);
-		tmp.setCancelable(false);
+		AlertDialog.Builder tmp = new AlertDialog.Builder(this).setView(view).setCancelable(false);
 		
 		return tmp;
 	}
@@ -403,10 +458,12 @@ public class MainActivity extends Activity implements OnClickListener
 
 		case R.id.anyelse:
 			anyelse.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.mainanim));
+			anyelseDialog.show();
 			break;
 		
 		case R.id.rule:
 			rule.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.mainanim));
+			ruleDialog.show();
 			break;
 			
 		case R.id.sheffle:
@@ -474,6 +531,18 @@ public class MainActivity extends Activity implements OnClickListener
 			
 		case R.id.supspend:
 			 pause();
+			break;
+		
+		case R.id.toweibo:
+			Uri uri = Uri.parse("http://weibo.com/u/1776221183?from=feed&loc=avatar");
+			Intent it = new Intent(Intent.ACTION_VIEW, uri);
+			startActivity(it);
+			break;
+			
+		case R.id.togithub:
+			Uri uri2 = Uri.parse("https://github.com/Sasure/LinkGame");
+			Intent it2 = new Intent(Intent.ACTION_VIEW, uri2);
+			startActivity(it2);
 			break;
 			
 		default:
@@ -546,19 +615,23 @@ public class MainActivity extends Activity implements OnClickListener
 		super.onPause();
 	}
 	
-//	@Override
-//	public void onStop()
-//	{
-//		if(state == playing)
-//			state = pause;
-//		super.onStop();
-//	}
+	@Override
+	public void onStop()
+	{
+		if(state == playing)
+			state = pause;
+		
+
+		super.onStop();
+	}
 	
 //	@Override
 //	public void onDestroy()
 //	{
 //		state = nocreated;
 //		start.setImageResource(R.drawable.start);
+//		editor.putInt("max", maxgrade);
+//		editor.commit();
 //		super.onDestroy();
 //	}
 	
@@ -621,6 +694,9 @@ public class MainActivity extends Activity implements OnClickListener
 	private void flashmaxView()
 	{
 		maxgradeTextView.setText("最高："+maxgrade + "");
+		
+		editor.putInt("max", maxgrade);
+		editor.commit();
 	}
 	
 	private void flashcurrentView()
@@ -769,6 +845,9 @@ public class MainActivity extends Activity implements OnClickListener
 		
 		return oa;
 	}
+
+	
+
 	
 //	private void gameViewTouchUp(MotionEvent e)
 //	{

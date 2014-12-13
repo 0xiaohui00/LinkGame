@@ -4,4 +4,5 @@
     <color name="start">#ff66bb6a</color>
    <color name="backcolor">#ffe0e0e0</color>
    <color name="textcolor">#ff607d8b</color>
+   <color name="keytext">#ffee0000</color>
 </resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+    
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="作        者："
+            android:textSize="25dp"/>
+        <TextView
+            android:id="@+id/toweibo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" @Sasure"
+            android:textColor="@color/keytext"
+            android:textSize="25dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开源地址："
+            android:textSize="25dp"/>
+        <TextView
+            android:id="@+id/togithub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" @GitHub"
+            android:textColor="@color/keytext"
+            android:textSize="25dp"
+            />
+    </LinearLayout>
+</LinearLayout>

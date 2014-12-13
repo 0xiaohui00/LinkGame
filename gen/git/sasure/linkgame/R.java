@@ -20,21 +20,22 @@ public final class R {
     public static final class color {
         public static final int backcolor=0x7f050002;
         public static final int button=0x7f050000;
-        public static final int p_blue=0x7f050006;
-        public static final int p_brown=0x7f050009;
-        public static final int p_cyan=0x7f05000a;
-        public static final int p_deep_orange=0x7f050011;
-        public static final int p_deep_purple=0x7f050012;
-        public static final int p_green=0x7f050004;
-        public static final int p_indigo=0x7f05000d;
-        public static final int p_light_brown=0x7f05000b;
-        public static final int p_lime=0x7f05000f;
-        public static final int p_orange=0x7f050007;
-        public static final int p_pink=0x7f05000c;
-        public static final int p_purple=0x7f050008;
-        public static final int p_red=0x7f050005;
-        public static final int p_teal=0x7f05000e;
-        public static final int p_yellow=0x7f050010;
+        public static final int keytext=0x7f050004;
+        public static final int p_blue=0x7f050007;
+        public static final int p_brown=0x7f05000a;
+        public static final int p_cyan=0x7f05000b;
+        public static final int p_deep_orange=0x7f050012;
+        public static final int p_deep_purple=0x7f050013;
+        public static final int p_green=0x7f050005;
+        public static final int p_indigo=0x7f05000e;
+        public static final int p_light_brown=0x7f05000c;
+        public static final int p_lime=0x7f050010;
+        public static final int p_orange=0x7f050008;
+        public static final int p_pink=0x7f05000d;
+        public static final int p_purple=0x7f050009;
+        public static final int p_red=0x7f050006;
+        public static final int p_teal=0x7f05000f;
+        public static final int p_yellow=0x7f050011;
         public static final int start=0x7f050001;
         public static final int textcolor=0x7f050003;
     }
@@ -64,23 +65,29 @@ public final class R {
     }
     public static final class id {
         public static final int addtime=0x7f090007;
-        public static final int anyelse=0x7f09000a;
-        public static final int firstFrame=0x7f090008;
+        public static final int anyelse=0x7f09000c;
+        public static final int firstFrame=0x7f09000a;
         public static final int grade=0x7f090003;
         public static final int mainlayout=0x7f090000;
         public static final int maxgrade=0x7f090002;
         public static final int relativeLayout1=0x7f090001;
-        public static final int rule=0x7f090009;
+        public static final int rule=0x7f09000b;
         public static final int schedule=0x7f090004;
         public static final int sheffle=0x7f090006;
-        public static final int start=0x7f09000c;
+        public static final int start=0x7f09000e;
         public static final int supspend=0x7f090005;
-        public static final int third=0x7f09000b;
+        public static final int third=0x7f09000d;
+        public static final int togithub=0x7f090009;
+        public static final int toweibo=0x7f090008;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int below=0x7f030001;
-        public static final int topside=0x7f030002;
+        public static final int anyelselayout=0x7f030001;
+        public static final int below=0x7f030002;
+        public static final int overlayout=0x7f030003;
+        public static final int rulelayout=0x7f030004;
+        public static final int successlayout=0x7f030005;
+        public static final int topside=0x7f030006;
     }
     public static final class string {
         public static final int app_name=0x7f070000;
