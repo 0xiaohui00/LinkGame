@@ -12,14 +12,18 @@ import git.sasure.sub.linkAnimatorView;
 import git.sasure.sub.myFrameLayout;
 import git.sasure.sub.myRelativeLayout;
 import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,11 +32,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -41,32 +48,107 @@ import android.widget.Toast;
  * @version 1.0
  *
  */
-public class MainActivity extends Activity 
+public class MainActivity extends Activity implements OnClickListener
 {
+	private static final int nocreated = 0;//当前尚未开始游戏
+	private static final int pause = 1;//当前处于暂停
+	private static final int playing = 2;
+	private static final int tobegin = 3;
+	
+	private static final int defaultTime = 60;
+	private static final int reducetime = 0x11;
 
-	private GameView gameView;
+	private static final int perAdd = 10;
+	private static final int perRed = 5;
+	private int currentgrade = 0;
+	private int maxgrade = 0;
+	
+	private static  final int  maxshuffle = 2;
+	private static final int maxaddtime = 2;
+	
+	private int shufflecount = 0;
+	private  int addtimecount = 0;
+	
 	private Piece selected = null;
+	
+	private Vibrator vibrator;
+	
 	private View firstView;
 	private View secondView;
 	private View thirdView;
-	private ImageButton start;
-	private myRelativeLayout rl;
-	private  myFrameLayout fl;
-	private int backcolor;
-	private int currentcolor;
 	private animatorView foreView;
 	private linkAnimatorView linkAn;
-	private  Boolean isExit = false;  
 	
-//	private int[][] pieces;
+	private ImageView start;//开始
+	private ImageView anyelse;//其他
+	private ImageView rule;//规则
+	private ImageView addTime;//加时
+	private ImageView supspend;//暂停
+//	private ImageView ring;//音乐
+//	private ImageView vibrate;//振动
+	private ImageView sheffle;//洗牌
+	private TextView gradeTextView;//分数
+	private TextView maxgradeTextView;//最高分
+	private ProgressBar schedule;
 	
-	private boolean isbegin = false;
+	private GameView gameView;
+	private myRelativeLayout rl;
+	private  myFrameLayout fl;
+
+	private int backcolor;
+	private int currentcolor;
+	private int state = 0;
+	private  Boolean toExit = false;
+	
+	private Animation traslateAnimation;
+//	private Animation traslateAnimation2;
+	
+	private int time = defaultTime;
+	private AlertDialog.Builder lostDialog;
+	private AlertDialog.Builder successDialog;
+	private Timer timer;
+	private Handler handler = new Handler()
+	{
+		@Override
+		public void handleMessage(Message msg)
+		{
+			if(msg.what == reducetime)
+			{
+				if(!GameKit.hasPieces())
+				{
+					stopTimer();
+					successDialog.show();
+					return;
+				}
+					
+				schedule.setProgress(time);
+				time--;
+				
+				if(time < 0)
+				{
+					lostDialog.show();
+					MainActivity.this.vibrator.vibrate(1000);
+					stopTimer();
+					return;
+				}
+			}
+		}
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 
+		init();
+		initView();
+	}
+	
+	/**
+	 * 初始化数据
+	 */
+	private void init()
+	{
 		WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);  
 		DisplayMetrics metric = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(metric);
@@ -83,88 +165,62 @@ public class MainActivity extends Activity
         
         GameKit.Game_Y_begin = GameKit.screenHeight / 2 - GameKit.GameHeight / 2;
         
+        GameKit.defaultbackcolor = backcolor = getResources().getColor(R.color.backcolor);
+        
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+	}
+
+	/**
+	 * 初始化界面
+	 */
+	private void initView()
+	{
 		fl = new myFrameLayout(this);
-		
-		GameKit.defoultbackcolor = backcolor = getResources().getColor(R.color.backcolor);
 		fl.setBackgroundColor(backcolor);
 		
 		firstView = View.inflate(this, R.layout.activity_main, null);
-		foreView = new animatorView(this);
-		linkAn = new linkAnimatorView(this);
 		secondView = View.inflate(this, R.layout.below, null);
 		thirdView = View.inflate(this, R.layout.topside, null);
-		
-		start = (ImageButton) thirdView.findViewById(R.id.start);
-		rl = (myRelativeLayout) thirdView.findViewById(R.id.third);
-		RelativeLayout mainlayout = (RelativeLayout) firstView.findViewById(R.id.mainlayout);
-		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(GameKit.GameWidth,GameKit.GameHeight);
-		lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+		foreView = new animatorView(this);
+		linkAn = new linkAnimatorView(this);
 		
 		gameView = new GameView(this);
-		gameView.setLayoutParams(lp);
 		
-		mainlayout.addView(gameView);
+		start = (ImageView) thirdView.findViewById(R.id.start);
+		anyelse = (ImageView) secondView.findViewById(R.id.anyelse);
+		rule = (ImageView) secondView.findViewById(R.id.rule);
+		supspend = (ImageView) firstView.findViewById(R.id.supspend);
+//		ring = (ImageView) firstView.findViewById(R.id.ring);
+//		vibrate = (ImageView) firstView.findViewById(R.id.vibrate);
+		addTime = (ImageView) firstView.findViewById(R.id.addtime);
+		sheffle = (ImageView) firstView.findViewById(R.id.sheffle);
+		maxgradeTextView =(TextView) firstView.findViewById(R.id.maxgrade);
+		gradeTextView =(TextView) firstView.findViewById(R.id.grade);
+		schedule = (ProgressBar) firstView.findViewById(R.id.schedule);
+//		schedule.setMax(defaultTime);
+		
+		rl = (myRelativeLayout) thirdView.findViewById(R.id.third);
+		
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(GameKit.GameWidth,GameKit.GameHeight);
+		lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+		gameView.setLayoutParams(lp);
+		((RelativeLayout) firstView.findViewById(R.id.mainlayout)).addView(gameView);
 		
 		GameKit.setGameView(gameView);
-		
-//		gameView.setFocusable(false);
-		
-		fl.addView(firstView);
-		fl.addView(foreView);
-		fl.addView(linkAn);
+
 		fl.addView(secondView);
 		fl.addView(thirdView);
 		
 		setContentView(fl);
 		
-		start.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v) 
-			{
-				start.setEnabled(false);
-				isbegin = true;
-				
-				ObjectAnimator spreadAnimator = ObjectAnimator.ofInt(rl, "radius", rl.getRadius(),rl.getendradius());
-				ObjectAnimator disappearAnimator = ObjectAnimator.ofFloat(rl, "alpha", 1 , 0);
-				AnimatorSet set = new AnimatorSet();
-				set.setInterpolator(new DecelerateInterpolator ());
-				spreadAnimator.setDuration(500);
-				disappearAnimator.setDuration(500);
-				
-				set.play(spreadAnimator).before(disappearAnimator);
-				
-				spreadAnimator.addListener(new AnimatorListenerAdapter()
-				{
-					@Override
-					public void onAnimationEnd(Animator animation) 
-					{
-						fl.removeView(secondView);
-						
-						if(!GameKit.hasPieces())
-							GameKit.start(-1);
-					}
-				});
-				
-				disappearAnimator.addListener(new AnimatorListenerAdapter()
-				{
-					@Override
-					public void onAnimationEnd(Animator animation) 
-					{
-						fl.removeView(rl);
-//						fl.addView(foreView);
-//						fl.addView(linkAn);
-						rl.setAlpha(1);
-						rl.resetRadius();
-						start.setEnabled(true);
-//						gameView.setFocusable(true);
-					}
-				});
-				
-				set.start();
-			}
-		});
-		
+		start.setOnClickListener(this);
+		anyelse.setOnClickListener(this);
+		rule.setOnClickListener(this);
+		supspend.setOnClickListener(this);
+//		ring.setOnClickListener(this);
+//		vibrate.setOnClickListener(this);
+		addTime.setOnClickListener(this);
+		sheffle.setOnClickListener(this);
 		
 		gameView.setOnTouchListener(new OnTouchListener()
 		{
@@ -180,13 +236,256 @@ public class MainActivity extends Activity
 				{
 					gameViewTouchDown(e);
 				}
-				if (e.getAction() == MotionEvent.ACTION_UP)
-				{
-					gameViewTouchUp(e);
-				}
+//				if (e.getAction() == MotionEvent.ACTION_UP)
+//				{
+//					gameViewTouchUp(e);
+//				}
 				return true;
 			}
 		});
+		
+		lostDialog = createDialog("Game Over","太可惜了...").setPositiveButton("重新开始", new DialogInterface.OnClickListener() 
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				time = defaultTime;
+				backcolor = GameKit.defaultbackcolor;
+				fl.startBackAnimator(new Point(GameKit.screenWidth / 2, 0), GameKit.defaultbackcolor);
+				GameKit.start(-1);
+				shufflecount = 0;
+				addtimecount = 0;
+				resetGrade();
+				startTime();
+			}
+		});
+		
+		successDialog = createDialog("Success", "继续闯关吧！").setPositiveButton("继续", new DialogInterface.OnClickListener() 
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				time = defaultTime;
+				backcolor = GameKit.defaultbackcolor;
+				
+				fl.startBackAnimator(new Point(GameKit.screenWidth / 2, 0), GameKit.defaultbackcolor);
+				gameView.setselectedPiece(null);
+				GameKit.start(-1);
+				startTime();
+			}
+		});
+		
+		flashmaxView();
+		resetGrade();
+		
+		traslateAnimation = AnimationUtils.loadAnimation(this, R.anim.viewtranslate);
+//		traslateAnimation2 = AnimationUtils.loadAnimation(this, R.anim.viewtranslate2);
+		
+//		anyelse.startAnimation(traslateAnimation);
+//		rule.startAnimation(traslateAnimation);
+//		start.startAnimation(traslateAnimation);
+		thirdView.startAnimation(traslateAnimation);
+		secondView.startAnimation(traslateAnimation);
+	//	rl.startAnimation(traslateAnimation);
+	}
+	
+	private AlertDialog.Builder createDialog(String title,String message)
+	{
+		AlertDialog.Builder tmp = new AlertDialog.Builder(this).setTitle(title).setMessage(message);
+		tmp.setCancelable(false);
+		
+		return tmp;
+	}
+	
+	private void startTime()
+	{
+		if(timer == null)
+		{
+			this.timer = new Timer();
+			// 启动计时器 ， 每隔1秒发送一次消息
+			this.timer.schedule(new TimerTask()
+			{
+				public void run()
+				{
+					handler.sendEmptyMessage(reducetime);
+				}
+			}, 0, 1000);
+		}
+	}
+	
+	private void stopTimer()
+	{
+		// 停止定时器
+		if(timer != null)
+		{
+			this.timer.cancel();
+			this.timer = null;
+		}
+	}
+	
+//	private void nextGame()
+//	{
+//		if(this.timer != null)
+//			stopTimer();
+//		
+//		startTime();
+//	}
+	
+//	private void startGame()
+//	{
+//		if(this.timer != null)
+//			stopTimer();
+//		
+//		startTime();
+//	}
+	
+
+	@Override
+	public void onClick(View v)
+	{
+		switch(v.getId())
+		{
+		case R.id.start:
+			start.setEnabled(false);
+			state = playing;
+			
+			thirdView.clearAnimation();
+			secondView.clearAnimation();
+			
+//			rl.clearAnimation();
+		//	traslateAnimation.cancel();
+			ObjectAnimator spreadAnimator = ObjectAnimator.ofInt(rl, "radius", rl.getRadius(),rl.getendradius());
+			ObjectAnimator disappearAnimator = ObjectAnimator.ofFloat(rl, "alpha", 1 , 0);
+			AnimatorSet set = new AnimatorSet();
+			set.setInterpolator(new DecelerateInterpolator ());
+			spreadAnimator.setDuration(500);
+			disappearAnimator.setDuration(500);
+		
+			set.play(spreadAnimator).before(disappearAnimator);
+			
+			spreadAnimator.addListener(new AnimatorListenerAdapter()
+			{
+				@Override
+				public void onAnimationEnd(Animator animation) 
+				{
+					fl.removeView(secondView);
+				
+//					start.setEnabled(false);
+					
+					fl.addView(firstView);
+					fl.addView(foreView);
+					fl.addView(linkAn);
+					
+					schedule.setMax(defaultTime);
+					schedule.setProgress(time);
+					
+					if(!GameKit.hasPieces())
+						GameKit.start(-1);
+				}
+			});
+			
+			disappearAnimator.addListener(new AnimatorListenerAdapter()
+			{
+				@Override
+				public void onAnimationEnd(Animator animation) 
+				{
+					fl.removeView(thirdView);
+					rl.resetRadius();
+					rl.setAlpha(1);
+					start.setEnabled(true);
+					
+					startTime();
+				}
+			});
+			
+			set.start();
+			break;
+
+		case R.id.anyelse:
+			anyelse.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.mainanim));
+			break;
+		
+		case R.id.rule:
+			rule.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.mainanim));
+			break;
+			
+		case R.id.sheffle:
+			if(++shufflecount <= maxshuffle)
+			{
+				sheffle.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.buttonrotate));
+				Toast.makeText(MainActivity.this, "还剩" + (maxshuffle - shufflecount) +"次洗牌机会", Toast.LENGTH_SHORT).show();
+				selected = null;
+				gameView.setselectedPiece(null);
+				GameKit.sheffle();
+			}
+			else
+			{
+				Toast.makeText(MainActivity.this, "已经用完机会...", Toast.LENGTH_SHORT).show();
+			}
+			break;
+			
+		case R.id.addtime:
+			if(++addtimecount <= maxaddtime)
+			{
+				Animation at = AnimationUtils.loadAnimation(MainActivity.this, R.anim.mainanim);
+			//	at.setRepeatMode(Animation.REVERSE);
+				at.setAnimationListener(new AnimationListener()
+				{	
+					@Override
+					public void onAnimationStart(Animation animation)
+					{
+						stopTimer();
+						time = time + 15 < defaultTime ? time + 15 : defaultTime;
+						ObjectAnimator oa = ObjectAnimator.ofInt(schedule, "progress", schedule.getProgress(),time);
+						oa.setDuration(300);
+						oa.setInterpolator(new DecelerateInterpolator());
+						oa.addListener(new AnimatorListenerAdapter() 
+						{
+							@Override
+							public void onAnimationEnd(Animator animation) 
+							{
+								startTime();
+								Toast.makeText(MainActivity.this, "还剩" + (maxaddtime - addtimecount) +"次加时机会", Toast.LENGTH_SHORT).show();
+							}
+						});
+						oa.start();
+					}
+					
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void onAnimationEnd(Animation animation) 
+					{
+					}
+				});
+				
+				addTime.startAnimation(at);
+//				handler.sendEmptyMessage(reducetime);
+			}
+			else
+			{
+				Toast.makeText(MainActivity.this, "已经用完机会...", Toast.LENGTH_SHORT).show();
+			}
+			break;
+			
+		case R.id.supspend:
+			 pause();
+			break;
+			
+		default:
+			break;
+		}
+	}
+
+	private void pause()
+	{
+		stopTimer();
+		state = pause;
+		rebegin();
 	}
 	
 	/** 
@@ -209,17 +508,21 @@ public class MainActivity extends Activity
 	{  
 	    Timer tExit = null;  
 	    
-	    if (isExit == false) 
+	    if (toExit == false) 
 	    {  
-	        isExit = true; // 准备退出  
-	        Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();  
+	    	if(state == playing)
+	    	{
+	    		 pause();
+	    	}
+	    	toExit = true; // 准备退出 
+	        Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
 	        tExit = new Timer();  
 	        tExit.schedule(new TimerTask() 
 	        {  
 	            @Override  
 	            public void run() 
 	            {  
-	                isExit = false; // 取消退出  
+	            	toExit = false; // 取消退出  
 	            }  
 	        }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务  
 	  
@@ -230,45 +533,105 @@ public class MainActivity extends Activity
 	    }  
 	}  
 	
+	
 	@Override
 	public void onPause()
 	{
+		if(state == playing)
+		{
+			state = pause;
+			stopTimer();
+		}
+		
 		super.onPause();
 	}
 	
-	@Override
-	public void onStop()
-	{
-		super.onStop();
-	}
+//	@Override
+//	public void onStop()
+//	{
+//		if(state == playing)
+//			state = pause;
+//		super.onStop();
+//	}
+	
+//	@Override
+//	public void onDestroy()
+//	{
+//		state = nocreated;
+//		start.setImageResource(R.drawable.start);
+//		super.onDestroy();
+//	}
 	
 	@Override
 	public void onResume()
 	{
-		if(isbegin == true)
+		if(state != nocreated)
 		{
-			start.setImageResource(R.drawable.rebegin);
-			
 			rebegin();
 		}
 		
 		super.onResume();
 	}
 
-	@Override
-	public void onRestart()
-	{
-		super.onRestart();
-		start.setImageResource(R.drawable.start);
-	}
+//	@Override
+//	public void onRestart()
+//	{
+//		super.onRestart();
+//	}
 	
 	private void rebegin()
 	{
-//		gameView.setFocusable(false);
-//		fl.removeView(foreView);
-//		fl.removeView(linkAn);
-		fl.addView(secondView);
-		fl.addView(thirdView);
+		if(state == pause)
+		{
+			start.setImageResource(R.drawable.rebegin);
+			fl.addView(secondView);
+			fl.addView(thirdView);
+			fl.removeView(firstView);
+			fl.removeView(foreView);
+			fl.removeView(linkAn);
+			
+			thirdView.startAnimation(traslateAnimation);
+			secondView.startAnimation(traslateAnimation);
+			state = tobegin;
+		}
+	}
+	
+	private void addGrade(int add)
+	{
+		currentgrade += add;
+		flashcurrentView();
+		
+		if(maxgrade < currentgrade)
+		{
+			maxgrade = currentgrade;
+			flashmaxView();
+		}
+	}
+
+	private void reduceGrade(int red)
+	{
+		if(currentgrade - red >= 0)
+		{
+			currentgrade -= red;
+		}
+		
+		flashcurrentView();
+	}
+	
+	private void flashmaxView()
+	{
+		maxgradeTextView.setText("最高："+maxgrade + "");
+	}
+	
+	private void flashcurrentView()
+	{
+		gradeTextView.setText("目前："+currentgrade +"");
+	}
+	
+	private void resetGrade()
+	{
+		currentgrade = 0;
+		flashcurrentView();
 	}
 	
 	private void gameViewTouchDown(MotionEvent e)
@@ -278,7 +641,7 @@ public class MainActivity extends Activity
 		
 		if(current == null || pieces[current.i][current.j] == 0)
 			return;
-	//	Log.i("test",GameKit.getScreenPoint(current.i,current.j).x +"foreView" + GameKit.getScreenPoint(current.i,current.j).y);
+
 		foreView.startforeAnimator(GameKit.getScreenPoint(current.i,current.j));
 		
 		gameView.setselectedPiece(current);
@@ -290,14 +653,17 @@ public class MainActivity extends Activity
 			
 			return;
 		}
-		
-		if(selected != null)
+		else if(!(selected.i == current.i && selected.j == current.j))
 		{
 			List<Point> linkInfo = GameKit.link(selected, current,pieces);
 			
 			if(linkInfo == null)
 			{
-				selected = current;
+				this.vibrator.vibrate(150);
+			//	selected = current;
+				selected = null;
+				reduceGrade(perRed);
+				gameView.setselectedPiece(null);
 				gameView.postInvalidate();
 			}
 			else
@@ -307,16 +673,16 @@ public class MainActivity extends Activity
 		}
 	}
 	
-	private void handleSuccessLink(List<Point> linkInfo, final Piece selected,
-			final Piece current, final int[][] pieces)  
+	private void handleSuccessLink(List<Point> linkInfo, final Piece selected,final Piece current, final int[][] pieces)  
 	{
 		AnimatorSet set = linkAnimatorSet(linkInfo);
-		
+		addGrade(perAdd);
 		currentcolor = getApplicationContext().getResources().getColor(pieces[current.i][current.j]);
 		
 		if(backcolor == currentcolor)
 		{
-			backcolor = currentcolor = GameKit.defoultbackcolor;
+			backcolor = currentcolor = GameKit.defaultbackcolor;
+			addGrade(perAdd);
 		}
 		else
 		{
@@ -327,7 +693,8 @@ public class MainActivity extends Activity
 		
 		linkAn.setPaintColor(currentcolor);
 		
-		set.addListener(new AnimatorListenerAdapter() {
+		set.addListener(new AnimatorListenerAdapter() 
+		{
 			
 			@Override
 			public void onAnimationStart(Animator animation) 
@@ -354,16 +721,14 @@ public class MainActivity extends Activity
 		set.setInterpolator(new DecelerateInterpolator());
 		
 		set.start();
-	//	gameView.setLinks(linkInfo);
-		
-//		gameView.postInvalidate();
-		
-	//	pieces[current.i][current.j] = 0;
-	//	pieces[selected.i][selected.j] = 0;
-		
 		this.selected = null;
 	}
 
+	/**
+	 * 将连接线转化成动画
+	 * @param linkInfo
+	 * @return 动画
+	 */
 	private AnimatorSet linkAnimatorSet(List<Point> linkInfo)
 	{
 		AnimatorSet set = new AnimatorSet();
@@ -392,6 +757,12 @@ public class MainActivity extends Activity
 		return set;
 	}
 	
+	/**
+	 * 将两点转化成动画
+	 * @param current
+	 * @param next
+	 * @return
+	 */
 	private ObjectAnimator perstep(Point current,Point next)
 	{
 		ObjectAnimator oa = ObjectAnimator.ofObject(linkAn, "point", new PointEvaluator(), current,next);
@@ -399,15 +770,16 @@ public class MainActivity extends Activity
 		return oa;
 	}
 	
-	private void gameViewTouchUp(MotionEvent e)
-	{
-		
-		if(!GameKit.hasPieces())
-		{
-			Toast.makeText(getApplicationContext(), "您赢啦！！", Toast.LENGTH_LONG).show();
-			
-		//	GameKit.start(-1);
-			//fl.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.backcolor));
-		}
-	}
+//	private void gameViewTouchUp(MotionEvent e)
+//	{
+//		
+//		if(!GameKit.hasPieces())
+//		{
+//			successDialog.show();
+//			stopTimer();
+//		//	backcolor = currentcolor = GameKit.defoultbackcolor;
+//		}
+//	}
+
+
 }

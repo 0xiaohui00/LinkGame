@@ -68,11 +68,11 @@ public class myFrameLayout extends FrameLayout
 			//	successlink = false;
 				myFrameLayout.this.setBackgroundColor(color);
 				
-				if(!GameKit.hasPieces())
-				{
-					startBackAnimator(new Point(GameKit.screenWidth / 2, 0), GameKit.defoultbackcolor);
-					GameKit.start(-1);
-				}
+//				if(!GameKit.hasPieces())
+//				{
+//					startBackAnimator(new Point(GameKit.screenWidth / 2, 0), GameKit.defoultbackcolor);
+//					GameKit.start(-1);
+//				}
 			}
 		});
 		

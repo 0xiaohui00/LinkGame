@@ -1,11 +1,19 @@
 package git.sasure.Kit;
 
 import git.sasure.Abs.SquareArrangement;
+import git.sasure.arrway.centerArr;
+import git.sasure.arrway.columnArr;
+import git.sasure.arrway.downtigonArr;
+import git.sasure.arrway.fullArr;
+import git.sasure.arrway.oddcolumnArr;
+import git.sasure.arrway.oddrowArr;
+import git.sasure.arrway.randArr;
+import git.sasure.arrway.rowArr;
+import git.sasure.arrway.trigonArr;
+import git.sasure.arrway.uptrigon;
 import git.sasure.linkgame.Piece;
 import git.sasure.linkgame.R;
 import git.sasure.sub.GameView;
-import git.sasure.sub.centerArr;
-import git.sasure.sub.fullArr;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -32,23 +40,30 @@ public class GameKit
 	public static int Game_Y_begin = 0;
 	public static int GameWidth = 0;
 	public static int GameHeight = 0;
-	public static int GameXN = 7;//连连看横排有GameXN个方块
-	public static int GameYN = 8;//连连看竖排有GameYN个方块
+	public static final int GameXN = 7;//连连看横排有GameXN个方块
+	public static final int GameYN = 8;//连连看竖排有GameYN个方块
 	public static int PieceWidth = 0;//每个方块的宽度
 	public static int PieceHeidth = 0;//每个方块的高度
 	public static int screenWidth = 0;
 	public static int screenHeight = 0;
-	public static int defoultbackcolor = 0;
-
+	public static int defaultbackcolor = 0;
+	
 	//加载排列方式
 	static
 	{
 		myArrs = new ArrayList<>();
 		
-		myArrs.add(new centerArr());
-		myArrs.add(new fullArr());
+//		myArrs.add(new centerArr());
+//		myArrs.add(new fullArr());
+//		myArrs.add(new columnArr());
+//		myArrs.add(new oddcolumnArr());
+//		myArrs.add(new oddrowArr());
+//		myArrs.add(new rowArr());
+//		myArrs.add(new trigonArr());
+//		myArrs.add(new uptrigon());
+//		myArrs.add(new downtigonArr());
+		myArrs.add(new randArr());
 	}
-	
 	
 	public static void setGameView(GameView gameView)
 	{
@@ -435,12 +450,7 @@ public class GameKit
 		}
 		return index;
 	}
-	
-//	public static Point getLinkPoint(Piece current)
-//	{
-//		return new Point(Game_X_begin + current.i * PieceWidth + PieceWidth / 2, Game_Y_begin + current.j * PieceHeidth + PieceHeidth / 2);
-//	}
-	
+
 	/**
 	 * 传入可变长的形参
 	 * @param points
@@ -456,5 +466,26 @@ public class GameKit
 			ArrPoint.add(point);
 		}
 		return ArrPoint;
+	}
+	
+	public static void sheffle()
+	{
+		int[][] pieces = gameView.getPieces();
+		List<Integer> pieceslist = new ArrayList<>();
+		
+
+		for(int i = 0;i < pieces.length;++i)
+			for(int j = 0;j < pieces[i].length;++j)
+			{
+				pieceslist.add(pieces[i][j]);
+				Log.i("test", "pieces.lenght:" +pieces.length +"pieces[i].length:"+pieces[i].length);
+			}
+		Collections.shuffle(pieceslist);
+		
+		for(int i = 0;i < pieces.length;++i)
+			for(int j = 0;j < pieces[i].length;++j)
+				pieces[i][j] = pieceslist.get(i * GameYN + j);
+		
+		gameView.postInvalidate();
 	}
 }

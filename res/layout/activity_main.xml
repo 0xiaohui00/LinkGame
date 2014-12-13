@@ -1,15 +1,86 @@
-<RelativeLayout 
-    android:id="@+id/mainlayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="top"
     tools:context="${relativePackage}.${activityClass}" >
-    
-<!--         <git.sasure.linkgame.GameView  -->
-<!-- 	        android:id="@+id/gameView" -->
-<!-- 	        android:layout_width="700px" -->
-<!-- 	        android:layout_height="800px" -->
-<!-- 	        android:layout_centerInParent="true" -->
-<!--         /> -->
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" >
+
+		<LinearLayout 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:layout_alignParentTop="true"
+		    >
+		    <TextView
+		        android:id="@+id/maxgrade"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="00"
+		        android:textColor="@color/button"
+		        android:textSize="20dp"
+		        />
+		    
+		   <TextView
+		       android:id="@+id/grade"
+		       android:layout_width="wrap_content"
+		       android:layout_height="wrap_content"
+		       android:text="00"
+		       android:textColor="@color/button"
+		       android:textSize="20dp"/>
+		</LinearLayout>
+		</RelativeLayout>
+		
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout1"
+         android:layout_marginTop="10dp"
+         >
+            <ProgressBar
+                android:id="@+id/schedule"
+                android:layout_width="250dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:progressDrawable="@drawable/myprogressbar"/>
+
+        <ImageView
+            android:id="@+id/supspend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/schedule"
+            android:background="#00ffffff"
+            android:src="@drawable/supspend" />
+
+   </RelativeLayout>
+        <ImageButton
+            android:id="@+id/sheffle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:background="#00ffffff"
+            android:src="@drawable/sheffle" />
+
+        <ImageButton
+            android:id="@+id/addtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" 
+            android:layout_alignParentBottom="true"
+             android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:background="#00ffffff"
+            android:src="@drawable/addtime" />
+
 </RelativeLayout>

@@ -5,49 +5,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00ffffff" >
-    
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:background="#00ffffff" >
+ 
+<!--         <RelativeLayout -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignParentTop="true" -->
+<!--         android:layout_marginTop="20dp" -->
+<!--         android:background="#00ffffff" > -->
 
 <!--         <ImageView -->
-<!--             android:id="@+id/imageView1" -->
 <!--             android:layout_width="wrap_content" -->
 <!--             android:layout_height="wrap_content" -->
 <!--             android:layout_alignParentLeft="true" -->
 <!--             android:layout_marginLeft="30dp" -->
-<!--             android:src="@drawable/tipbackground" /> -->
-
-        <ImageButton
-            android:id="@+id/anyelse"
+<!--             android:background="#00ffffff" -->
+<!--             android:src="@drawable/title1" /> -->
+        
+<!--                <ImageView -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_alignParentRight="true" -->
+<!--             android:layout_marginRight="30dp" -->
+<!--             android:background="#00ffffff" -->
+<!--             android:src="@drawable/title2" /> -->
+<!--     </RelativeLayout> -->
+    
+        
+<!--     <RelativeLayout -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignParentBottom="true" -->
+<!--         android:layout_marginBottom="20dp" -->
+<!--         android:background="#00ffffff" > -->
+        <ImageView
+            android:id="@+id/rule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/tipbackground"
-            android:src="@drawable/anyelse" />
+            android:layout_marginRight="20dp"
+            android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+            android:background="#00ffffff"
+            android:src="@drawable/rule" />
 
-        <ImageButton
-            android:id="@+id/none"
+        <ImageView
+            android:id="@+id/anyelse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="30dp"
-            android:background="@drawable/tipbackground"
-            android:src="@drawable/none" />
-
-    </RelativeLayout>
-
-<!--     <ImageView -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:layout_alignParentTop="true" -->
-<!--         android:layout_centerHorizontal="true" -->
-<!--         android:layout_marginTop="30dp" -->
-<!--         android:background="#00ffffff" -->
-<!--         android:src="@drawable/title" /> -->
-
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+            android:background="#00ffffff"
+            android:src="@drawable/anyelse" />
+<!--     </RelativeLayout> -->
 </RelativeLayout>

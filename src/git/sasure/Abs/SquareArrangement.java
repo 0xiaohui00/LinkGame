@@ -6,6 +6,7 @@ import git.sasure.linkgame.Piece;
 import java.util.List;
 
 import android.graphics.Point;
+import android.util.Log;
 
 /**
  * 本类为抽象类，通过继承其产生不同的排列效果
@@ -32,10 +33,12 @@ public abstract class SquareArrangement
 		List<Piece> notNULLPieces= createArrangement();
 		List<Integer> SqureValues = GameKit.getValues(notNULLPieces.size());
 		
-		for(int i = 0;i < notNULLPieces.size() && i < SqureValues.size();++i)
+		
+		Log.i("test", "n:" + notNULLPieces.size() + "  s:"+SqureValues.size());
+		for(int i = 0;i < notNULLPieces.size()  && i < SqureValues.size();++i)
 		{
 			Piece piece = notNULLPieces.get(i);
-			
+			Log.i("test", i + "");
 			pieces[piece.i][piece.j] = SqureValues.get(i);
 		}
 		

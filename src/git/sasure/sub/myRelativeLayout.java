@@ -31,7 +31,7 @@ public class myRelativeLayout extends RelativeLayout
 
         paint = new Paint();
         paint.setAntiAlias(true); 
-        paint.setColor(context.getResources().getColor(R.color.centerbutton));
+        paint.setColor(context.getResources().getColor(R.color.start));
 	}
 	
 	

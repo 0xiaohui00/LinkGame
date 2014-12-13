@@ -16,5 +16,16 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-
+	
+<!--     <style name="dialogstyle" parent="android:style/Theme.Dialog"> -->
+<!--         <item name="android:windowNoTitle">true</item> -->
+<!--         <item name="android:windowBackground">@color/backcolor</item> -->
+<!--         <item name="@android:windowEnterAnimation">@anim/dialogenter</item> -->
+<!--         <item name="@android:windowExitAnimation">@anim/dialogexit</item> -->
+<!--     </style> -->
+    
+<!--     <style name="Animation.Translucent"> -->
+<!--         <item name="windowEnterAnimation">@anim/dialogenter</item> -->
+<!--         <item name="widowExitAnimation">@anim/dialogexit</item> -->
+<!--     </style> -->
 </resources>

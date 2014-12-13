@@ -3,7 +3,7 @@
     package="git.sasure.linkgame"
     android:versionCode="1"
     android:versionName="1.0" >
-
+	<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />

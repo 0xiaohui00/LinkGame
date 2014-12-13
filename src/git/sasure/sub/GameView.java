@@ -123,12 +123,12 @@ public class GameView extends View
 	protected void onDraw(Canvas canvas)
 	{
 		super.onDraw(canvas);
-		canvas.drawRoundRect(ovalf, 60, 60, pathpaint);
+		
 		if(pieces == null)//如果尚无方块的信息，直接返回
 			return;
 		
 	//	canvas.drawPath(path, pathpaint);
-		
+		canvas.drawRoundRect(ovalf, 60, 60, pathpaint);
 		
 		for(int i = 0;i < GameKit.GameXN;++i)
 			for(int j = 0;j < GameKit.GameYN;++j)
