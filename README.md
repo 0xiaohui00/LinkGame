@@ -2,7 +2,7 @@
 ========
 一款类似连连看软件，将持续更新<br>
 多谢自李刚的《疯狂android讲义》以及通过百度搜索到的各路高手的帮助，在这里对他们表示感谢,也欢迎各位对代码进行改良<br>
-游戏的安装包在https://github.com/Sasure/LinkGame/blob/master/bin/LinkGame.apk<br><br><br>
+游戏的安装包在https://github.com/Sasure/LinkGame/blob/master/tmp/撞色.apk<br><br><br>
 
 2014/12/14更新<br>
 即将在小米应用商城和豌豆荚发布<br>
