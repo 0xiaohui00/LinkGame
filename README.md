@@ -1,12 +1,17 @@
 撞色
 ========
-一款连连看软件，将持续更新<br>
-部分代码参考自李刚的《疯狂android讲义》，在这里对他表示感谢,也欢迎各位对代码进行改良<br>
+一款类似连连看软件，将持续更新<br>
+多谢自李刚的《疯狂android讲义》以及百度搜索的各路高手的帮助，在这里对他们表示感谢,也欢迎各位对代码进行改良<br>
 游戏的安装包在https://github.com/Sasure/LinkGame/blob/master/bin/LinkGame.apk<br><br><br>
 
+2014/12/14更新<br>
+即将在小米应用商城和豌豆荚发布<br>
+最新的预览图<br>
+![](https://github.com/Sasure/LinkGame/raw/master/tmp/12-14.png)<br><br>
+===========================================================================
 在2014/12/7更新<br>
 加入了动画元素，定位逐渐清晰<br>
-![](https://github.com/Sasure/LinkGame/raw/master/tmp/update12_7.png)<br><br><br>
+![](https://github.com/Sasure/LinkGame/raw/master/tmp/update12_7.png)<br><br>
 ============================================================================
 在2014/11/30开始<br>
 由于目前还不熟练运用photoshop，所以软件还十分粗糙，但连连看的主要逻辑已经实现<br>
