@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -71,6 +72,7 @@ public class MainActivity extends Activity implements OnClickListener
 	private static final int perRed = 5;
 	private int currentgrade = 0;
 	private int maxgrade = 0;
+	private int level = 0;
 	
 	private static  final int  maxshuffle = 2;
 	private static final int maxaddtime = 2;
@@ -99,6 +101,7 @@ public class MainActivity extends Activity implements OnClickListener
 	private ImageView sheffle;//洗牌
 	private TextView gradeTextView;//分数
 	private TextView maxgradeTextView;//最高分
+	private TextView levelTextView;//关卡
 	private ProgressBar schedule;
 
 	private GameView gameView;
@@ -118,6 +121,8 @@ public class MainActivity extends Activity implements OnClickListener
 	private AlertDialog successDialog;
 	private AlertDialog ruleDialog;
 	private AlertDialog anyelseDialog;
+	private AlertDialog lastDialog;
+	
 	private Timer timer;
 	private Handler handler = new Handler()
 	{
@@ -215,6 +220,7 @@ public class MainActivity extends Activity implements OnClickListener
 		sheffle = (ImageView) firstView.findViewById(R.id.sheffle);
 		maxgradeTextView =(TextView) firstView.findViewById(R.id.maxgrade);
 		gradeTextView =(TextView) firstView.findViewById(R.id.grade);
+		levelTextView =(TextView) firstView.findViewById(R.id.level);
 		schedule = (ProgressBar) firstView.findViewById(R.id.schedule);
 //		schedule.setMax(defaultTime);
 		
@@ -268,7 +274,9 @@ public class MainActivity extends Activity implements OnClickListener
 		{
 			@Override
 			public void onClick(DialogInterface dialog, int which) 
-			{
+			{ 
+				level = 0;
+				levelTextView.setText("Level：" + level);
 				time = defaultTime;
 				backcolor = GameKit.defaultbackcolor;
 				fl.startBackAnimator(new Point(GameKit.screenWidth / 2, 0), GameKit.defaultbackcolor);
@@ -279,7 +287,7 @@ public class MainActivity extends Activity implements OnClickListener
 				startTime();
 				lostDialog.dismiss();
 			}
-		}).create();
+		}).setCancelable(false).create();
 		
 		View successView = View.inflate(this, R.layout.successlayout, null);
 		successDialog = createDialog(successView).setPositiveButton("继续", new DialogInterface.OnClickListener() 
@@ -287,6 +295,8 @@ public class MainActivity extends Activity implements OnClickListener
 			@Override
 			public void onClick(DialogInterface dialog, int which) 
 			{
+				++level;
+				levelTextView.setText("Level：" + level);
 				time = defaultTime;
 				backcolor = GameKit.defaultbackcolor;
 				
@@ -296,7 +306,7 @@ public class MainActivity extends Activity implements OnClickListener
 				startTime();
 				successDialog.dismiss();
 			}
-		}).create();
+		}).setCancelable(false).create();
 		
 //		LinearLayout ll = (LinearLayout) getLayoutInflater().inflate(R.layout.rulelayout, null);
 		View ruleView = View.inflate(this, R.layout.rulelayout, null);
@@ -312,7 +322,10 @@ public class MainActivity extends Activity implements OnClickListener
 		
 		View anyelseView = View.inflate(this, R.layout.anyelselayout, null);
 		TextView author = (TextView) anyelseView.findViewById(R.id.toweibo);
+		author.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+		
 		TextView address = (TextView) anyelseView.findViewById(R.id.togithub);
+		address.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 		
 		author.setOnClickListener(this);
 		address.setOnClickListener(this);
@@ -326,7 +339,37 @@ public class MainActivity extends Activity implements OnClickListener
 			}
 		}).create();
 		
-
+		
+		View lastView = View.inflate(this, R.layout.reorexlayout, null);
+		
+		lastDialog = createDialog(lastView).setPositiveButton("重新开始", new DialogInterface.OnClickListener() 
+		{
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				level = 0;
+				levelTextView.setText("Level：" + level);
+				time = defaultTime;
+				backcolor = GameKit.defaultbackcolor;
+				fl.startBackAnimator(new Point(GameKit.screenWidth / 2, 0), GameKit.defaultbackcolor);
+				state = nocreated;
+				shufflecount = 0;
+				addtimecount = 0;
+				resetGrade();
+				gameView.setPieces(null);
+				start.setImageResource(R.drawable.start);
+			}
+		}).setNegativeButton("退出", new DialogInterface.OnClickListener()
+		{
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				 finish();
+				 System.exit(0);  
+			}
+		}).create();
 		
 		maxgrade = preferences.getInt("max", 0);
 		flashmaxView();
@@ -336,6 +379,13 @@ public class MainActivity extends Activity implements OnClickListener
 
 		thirdView.startAnimation(traslateAnimation);
 		secondView.startAnimation(traslateAnimation);
+		
+		int count = preferences.getInt("count", 0);
+		if(count < 3)
+			ruleDialog.show();
+		
+		editor.putInt("count", ++count);
+		editor.commit();
 	}
 	
 //	private AlertDialog.Builder createDialog(String title,String message)
@@ -344,10 +394,11 @@ public class MainActivity extends Activity implements OnClickListener
 //		
 //		return tmp;
 //	}
+
 	
 	private AlertDialog.Builder createDialog(View view)
 	{
-		AlertDialog.Builder tmp = new AlertDialog.Builder(this).setView(view).setCancelable(false);
+		AlertDialog.Builder tmp = new AlertDialog.Builder(this).setView(view);
 		
 		return tmp;
 	}
@@ -565,43 +616,57 @@ public class MainActivity extends Activity implements OnClickListener
 	{  
 	    if(keyCode == KeyEvent.KEYCODE_BACK)  
 	       {    
-	           exitBy2Click();      //调用双击退出函数  
+	         //  exitBy2Click();      //调用双击退出函数  
+	    		restartorexit();
+	    		return true;
 	       }  
 	    return false;  
 	}  
 	
+	
+	private void restartorexit()
+	{
+		if(state == playing)
+			pause();
+		else
+		{
+			lastDialog.show();
+		}
+	}
+	
 	/** 
 	 * 双击退出函数 
 	 */ 
-	private void exitBy2Click() 
-	{  
-	    Timer tExit = null;  
-	    
-	    if (toExit == false) 
-	    {  
-	    	if(state == playing)
-	    	{
-	    		 pause();
-	    	}
-	    	toExit = true; // 准备退出 
-	        Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-	        tExit = new Timer();  
-	        tExit.schedule(new TimerTask() 
-	        {  
-	            @Override  
-	            public void run() 
-	            {  
-	            	toExit = false; // 取消退出  
-	            }  
-	        }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务  
-	  
-	    } else 
-	    {  
-	        finish();  
-	        System.exit(0);  
-	    }  
-	}  
-	
+//	private void exitBy2Click() 
+//	{  
+//	    Timer tExit = null;  
+//	    
+//	    if (toExit == false) 
+//	    {  
+//	    	if(state == playing)
+//	    	{
+//	    		 pause();
+//	    	}
+//	    	toExit = true; // 准备退出 
+//	        Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+//	        tExit = new Timer();  
+//	        tExit.schedule(new TimerTask() 
+//	        {  
+//	            @Override  
+//	            public void run() 
+//	            {  
+//	            	toExit = false; // 取消退出  
+//	            }  
+//	        }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务  
+//	  
+//	    } 
+//	    else 
+//	    {  
+//	        finish();  
+//	        System.exit(0);  
+//	    }  
+//	}  
+//	
 	
 	@Override
 	public void onPause()
@@ -693,7 +758,7 @@ public class MainActivity extends Activity implements OnClickListener
 	
 	private void flashmaxView()
 	{
-		maxgradeTextView.setText("最高："+maxgrade + "");
+		maxgradeTextView.setText("最高："+ maxgrade + "");
 		
 		editor.putInt("max", maxgrade);
 		editor.commit();
@@ -701,7 +766,7 @@ public class MainActivity extends Activity implements OnClickListener
 	
 	private void flashcurrentView()
 	{
-		gradeTextView.setText("目前："+currentgrade +"");
+		gradeTextView.setText("目前："+ currentgrade +"");
 	}
 	
 	private void resetGrade()

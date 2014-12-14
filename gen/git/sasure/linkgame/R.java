@@ -11,9 +11,8 @@ public final class R {
     public static final class anim {
         public static final int buttonrotate=0x7f040000;
         public static final int dialogenter=0x7f040001;
-        public static final int dialogexit=0x7f040002;
-        public static final int mainanim=0x7f040003;
-        public static final int viewtranslate=0x7f040004;
+        public static final int mainanim=0x7f040002;
+        public static final int viewtranslate=0x7f040003;
     }
     public static final class attr {
     }
@@ -49,45 +48,44 @@ public final class R {
         public static final int anyelse=0x7f020001;
         public static final int ic_launcher=0x7f020002;
         public static final int myprogressbar=0x7f020003;
-        public static final int noring=0x7f020004;
-        public static final int novibrate=0x7f020005;
-        public static final int progrssbar1=0x7f020006;
-        public static final int progrssbar2=0x7f020007;
-        public static final int rebegin=0x7f020008;
-        public static final int ring=0x7f020009;
-        public static final int rule=0x7f02000a;
-        public static final int sheffle=0x7f02000b;
-        public static final int start=0x7f02000c;
-        public static final int supspend=0x7f02000d;
-        public static final int title1=0x7f02000e;
-        public static final int title2=0x7f02000f;
-        public static final int vibrate=0x7f020010;
+        public static final int pause=0x7f020004;
+        public static final int progrssbar1=0x7f020005;
+        public static final int progrssbar2=0x7f020006;
+        public static final int rebegin=0x7f020007;
+        public static final int rule=0x7f020008;
+        public static final int sheffle=0x7f020009;
+        public static final int start=0x7f02000a;
+        public static final int supspend=0x7f02000b;
+        public static final int title1=0x7f02000c;
+        public static final int title2=0x7f02000d;
     }
     public static final class id {
-        public static final int addtime=0x7f090007;
-        public static final int anyelse=0x7f09000c;
-        public static final int firstFrame=0x7f09000a;
+        public static final int addtime=0x7f090008;
+        public static final int anyelse=0x7f09000d;
+        public static final int firstFrame=0x7f09000b;
         public static final int grade=0x7f090003;
+        public static final int level=0x7f090004;
         public static final int mainlayout=0x7f090000;
         public static final int maxgrade=0x7f090002;
         public static final int relativeLayout1=0x7f090001;
-        public static final int rule=0x7f09000b;
-        public static final int schedule=0x7f090004;
-        public static final int sheffle=0x7f090006;
-        public static final int start=0x7f09000e;
-        public static final int supspend=0x7f090005;
-        public static final int third=0x7f09000d;
-        public static final int togithub=0x7f090009;
-        public static final int toweibo=0x7f090008;
+        public static final int rule=0x7f09000c;
+        public static final int schedule=0x7f090005;
+        public static final int sheffle=0x7f090007;
+        public static final int start=0x7f09000f;
+        public static final int supspend=0x7f090006;
+        public static final int third=0x7f09000e;
+        public static final int togithub=0x7f09000a;
+        public static final int toweibo=0x7f090009;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int anyelselayout=0x7f030001;
         public static final int below=0x7f030002;
         public static final int overlayout=0x7f030003;
-        public static final int rulelayout=0x7f030004;
-        public static final int successlayout=0x7f030005;
-        public static final int topside=0x7f030006;
+        public static final int reorexlayout=0x7f030004;
+        public static final int rulelayout=0x7f030005;
+        public static final int successlayout=0x7f030006;
+        public static final int topside=0x7f030007;
     }
     public static final class string {
         public static final int app_name=0x7f070000;

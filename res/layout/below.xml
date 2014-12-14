@@ -13,21 +13,25 @@
 <!--         android:layout_marginTop="20dp" -->
 <!--         android:background="#00ffffff" > -->
 
-<!--         <ImageView -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:layout_alignParentLeft="true" -->
-<!--             android:layout_marginLeft="30dp" -->
-<!--             android:background="#00ffffff" -->
-<!--             android:src="@drawable/title1" /> -->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:background="#00ffffff"
+            android:src="@drawable/title1" />
         
-<!--                <ImageView -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:layout_alignParentRight="true" -->
-<!--             android:layout_marginRight="30dp" -->
-<!--             android:background="#00ffffff" -->
-<!--             android:src="@drawable/title2" /> -->
+               <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:background="#00ffffff"
+            android:src="@drawable/title2" />
 <!--     </RelativeLayout> -->
     
         
@@ -42,9 +46,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="30dp"
             android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="30dp"
             android:background="#00ffffff"
             android:src="@drawable/rule" />
 
@@ -53,9 +57,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="30dp"
             android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="30dp"
             android:background="#00ffffff"
             android:src="@drawable/anyelse" />
 <!--     </RelativeLayout> -->

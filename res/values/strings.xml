@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">碰碰乐</string>
+    <string name="app_name">撞色</string>
     <string name="hello_world">Hello world!</string>
 	<string name="rule1">1.玩家可以将2个相同颜色的方块连接起来，只要俩方块之间至多分三步能连在一起，有黑点在方块上方即为选中状态，只要在规定的时间内把全部方块消除，即可选择下一关，否则游戏失败。</string>
 	<string name="rule2">2.每关共60秒，成功连接一次加10分，失败扣5分，洗牌和加时每局有2次机会。</string>
-	<string name="rule3">3.当前选中的背景颜色会把与其相同颜色的方块覆盖，但其依然存在，而且如果此时能把俩背景颜色的方块成功连在一起，加20分哦，还有变回默认背景颜色的奖励！！</string>
+	<string name="rule3">3.当前选中的背景颜色会把与其相同颜色的方块掩盖，但其依然存在，而且如果此时能把俩背景颜色的方块成功连在一起，加20分哦，还能将背景变回默认颜色！！</string>
 	
 <!-- 	<string name="author"></string> -->
 <!-- 	<string name="author">@Sasure</string> -->
