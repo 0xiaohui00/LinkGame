@@ -4,7 +4,10 @@
 多谢自李刚的《疯狂android讲义》以及通过百度搜索到的各路高手的帮助，在这里对他们表示感谢,也欢迎各位对代码进行改良<br>
 游戏的安装包在https://github.com/Sasure/LinkGame/blob/master/tmp/撞色.apk<br><br><br>
 
-2014/12/18更新/<br>
+2014/12/19更新<br>
+豌豆荚下载地址：http://www.wandoujia.com/apps/git.sasure.linkgame<br>
+
+2014/12/18更新<br>
 小米应用商店下载地址：http://app.mi.com/detail/79875<br><br>
 
 2014/12/14更新<br>
