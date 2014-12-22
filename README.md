@@ -10,6 +10,9 @@
 2014/12/18更新<br>
 小米应用商店下载地址：http://app.mi.com/detail/79875<br><br>
 
+演示动画：<br>
+![](https://github.com/Sasure/LinkGame/raw/master/tmp/play.gif)<br><br>
+
 2014/12/14更新<br>
 即将在小米应用商城和豌豆荚发布<br>
 最新的预览图<br>
